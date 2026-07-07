@@ -2,10 +2,7 @@
 
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { RsvpEditPanel } from "@/components/admin/RsvpEditPanel";
-import {
-  formatHotelCheckInDates,
-  hotelNightCount,
-} from "@/lib/wedding";
+import { downloadRsvpCsv } from "@/lib/admin/rsvp-csv";
 import type { RSVPResponse } from "@/lib/types";
 
 function formatDate(iso: string) {
@@ -65,56 +62,23 @@ function buildNameGroups(
   return groups;
 }
 
-function exportCSV(responses: RSVPResponse[]) {
-  const headers = [
-    "Submitted",
-    "Name",
-    "Attending",
-    "Guests",
-    "Hotel",
-    "Check-in Dates",
-    "Hotel Guests",
-    "Nights",
-    "Arrival Time",
-    "Flight",
-    "Flight Arrival",
-    "Airport",
-    "Dietary",
-    "Note",
-  ];
-
-  const rows = responses.map((r) => [
-    r.created_at,
-    r.full_name,
-    r.attending ? "Yes" : "No",
-    r.num_guests,
-    r.hotel_needed ? "Yes" : "No",
-    r.hotel_needed
-      ? formatHotelCheckInDates(r.hotel_check_in_dates)
-      : "",
-    r.hotel_needed ? (r.hotel_num_guests ?? "") : "",
-    r.hotel_needed ? hotelNightCount(r.hotel_check_in_dates) : "",
-    r.arrival_time ?? "",
-    r.flight_number ?? "",
-    r.flight_arrival_time ?? "",
-    r.arriving_airport ?? "",
-    r.dietary_requirements ?? "",
-    r.note_to_couple ?? "",
-  ]);
-
-  const csv = [headers, ...rows]
-    .map((row) =>
-      row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","),
-    )
-    .join("\n");
-
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `rsvp-export-${new Date().toISOString().slice(0, 10)}.csv`;
-  link.click();
-  URL.revokeObjectURL(url);
+function DownloadIcon() {
+  return (
+    <svg
+      aria-hidden
+      className="h-4 w-4"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={1.8}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 4v10m0 0l-3.5-3.5M12 14l3.5-3.5M5 18h14"
+      />
+    </svg>
+  );
 }
 
 export default function AdminPage() {
@@ -196,12 +160,12 @@ export default function AdminPage() {
 
   const exportRows = useMemo(
     () =>
-      [...filtered].sort((a, b) => {
+      [...responses].sort((a, b) => {
         const diff =
           new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
         return sortAsc ? diff : -diff;
       }),
-    [filtered, sortAsc],
+    [responses, sortAsc],
   );
 
   const nameGroups = useMemo(
@@ -319,11 +283,12 @@ export default function AdminPage() {
           <div className="flex gap-3">
             <button
               type="button"
-              onClick={() => exportCSV(exportRows)}
+              onClick={() => downloadRsvpCsv(exportRows)}
               disabled={responses.length === 0}
-              className="rounded-full border border-gold/40 px-5 py-2 font-body text-xs tracking-wide text-gold uppercase disabled:opacity-40"
+              className="inline-flex items-center gap-2 rounded-full bg-gold px-5 py-2 font-body text-xs tracking-wide text-ink uppercase disabled:opacity-40"
             >
-              Export CSV
+              <DownloadIcon />
+              Download CSV
             </button>
             <button
               type="button"

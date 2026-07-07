@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { RsvpEditPanel } from "@/components/admin/RsvpEditPanel";
 import {
   formatHotelCheckInDates,
@@ -13,6 +13,56 @@ function formatDate(iso: string) {
     dateStyle: "medium",
     timeStyle: "short",
   });
+}
+
+function normalizeName(name: string) {
+  return name.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+type NameGroup = {
+  key: string;
+  displayName: string;
+  entries: RSVPResponse[];
+};
+
+function buildNameGroups(
+  responses: RSVPResponse[],
+  sortAsc: boolean,
+): NameGroup[] {
+  const map = new Map<string, RSVPResponse[]>();
+
+  for (const response of responses) {
+    const key = normalizeName(response.full_name);
+    const list = map.get(key) ?? [];
+    list.push(response);
+    map.set(key, list);
+  }
+
+  const groups: NameGroup[] = [];
+
+  for (const [key, entries] of map) {
+    const timeline = [...entries].sort(
+      (a, b) =>
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+    );
+    groups.push({
+      key,
+      displayName: timeline[timeline.length - 1]?.full_name ?? entries[0].full_name,
+      entries: timeline,
+    });
+  }
+
+  groups.sort((a, b) => {
+    const latestA = new Date(
+      a.entries[a.entries.length - 1].created_at,
+    ).getTime();
+    const latestB = new Date(
+      b.entries[b.entries.length - 1].created_at,
+    ).getTime();
+    return sortAsc ? latestA - latestB : latestB - latestA;
+  });
+
+  return groups;
 }
 
 function exportCSV(responses: RSVPResponse[]) {
@@ -79,6 +129,9 @@ export default function AdminPage() {
     "all" | "yes" | "no"
   >("all");
   const [editing, setEditing] = useState<RSVPResponse | null>(null);
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(
+    () => new Set(),
+  );
 
   const fetchResponses = useCallback(async () => {
     setLoading(true);
@@ -141,7 +194,7 @@ export default function AdminPage() {
     });
   }, [responses, search, attendingFilter]);
 
-  const sorted = useMemo(
+  const exportRows = useMemo(
     () =>
       [...filtered].sort((a, b) => {
         const diff =
@@ -150,6 +203,68 @@ export default function AdminPage() {
       }),
     [filtered, sortAsc],
   );
+
+  const nameGroups = useMemo(
+    () => buildNameGroups(filtered, sortAsc),
+    [filtered, sortAsc],
+  );
+
+  function toggleGroup(key: string) {
+    setExpandedGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  }
+
+  function renderResponseCells(
+    response: RSVPResponse,
+    options: { showName?: boolean; displayName?: string } = {},
+  ) {
+    const { showName = true, displayName } = options;
+
+    return (
+      <>
+        <td className="px-4 py-3 text-ivory/60">
+          {formatDate(response.created_at)}
+        </td>
+        <td className="px-4 py-3 text-ivory">
+          {showName ? displayName ?? response.full_name : null}
+        </td>
+        <td className="px-4 py-3">
+          <span className={response.attending ? "text-sage" : "text-blush"}>
+            {response.attending ? "Yes" : "No"}
+          </span>
+        </td>
+        <td className="px-4 py-3 text-ivory/70">{response.num_guests}</td>
+        <td className="px-4 py-3 text-ivory/70">
+          {response.hotel_needed ? "Yes" : "—"}
+        </td>
+        <td className="px-4 py-3 text-ivory/70">
+          {response.arrival_time || "—"}
+        </td>
+        <td className="max-w-[140px] truncate px-4 py-3 text-ivory/70">
+          {response.dietary_requirements || "—"}
+        </td>
+        <td className="max-w-[140px] truncate px-4 py-3 text-ivory/70">
+          {response.note_to_couple || "—"}
+        </td>
+        <td className="px-4 py-3">
+          <button
+            type="button"
+            onClick={() => setEditing(response)}
+            className="rounded-full border border-gold/30 px-3 py-1 font-body text-[10px] tracking-wide text-gold uppercase"
+          >
+            Edit
+          </button>
+        </td>
+      </>
+    );
+  }
 
   const attendingCount = responses.filter((r) => r.attending).length;
   const guestCount = responses
@@ -197,14 +312,14 @@ export default function AdminPage() {
               RSVP Responses
             </h1>
             <p className="mt-1 font-body text-sm text-ivory/50">
-              {responses.length} responses · {attendingCount} attending ·{" "}
-              {guestCount} total guests
+              {responses.length} responses · {nameGroups.length} guests ·{" "}
+              {attendingCount} attending · {guestCount} total guests
             </p>
           </div>
           <div className="flex gap-3">
             <button
               type="button"
-              onClick={() => exportCSV(sorted)}
+              onClick={() => exportCSV(exportRows)}
               disabled={responses.length === 0}
               className="rounded-full border border-gold/40 px-5 py-2 font-body text-xs tracking-wide text-gold uppercase disabled:opacity-40"
             >
@@ -254,7 +369,7 @@ export default function AdminPage() {
 
         {loading ? (
           <p className="mt-12 text-center font-body text-ivory/40">Loading...</p>
-        ) : sorted.length === 0 ? (
+        ) : nameGroups.length === 0 ? (
           <p className="mt-12 text-center font-body text-ivory/40">
             {responses.length === 0
               ? "No responses yet."
@@ -299,46 +414,183 @@ export default function AdminPage() {
                 </tr>
               </thead>
               <tbody>
-                {sorted.map((r) => (
-                  <tr
-                    key={r.id}
-                    className="border-b border-ivory/5 hover:bg-ivory/5"
-                  >
-                    <td className="px-4 py-3 text-ivory/60">
-                      {formatDate(r.created_at)}
-                    </td>
-                    <td className="px-4 py-3 text-ivory">{r.full_name}</td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={r.attending ? "text-sage" : "text-blush"}
+                {nameGroups.map((group) => {
+                  const latest = group.entries[group.entries.length - 1];
+                  const isMulti = group.entries.length > 1;
+                  const expanded = expandedGroups.has(group.key);
+
+                  if (!isMulti) {
+                    return (
+                      <tr
+                        key={latest.id}
+                        className="border-b border-ivory/5 hover:bg-ivory/5"
                       >
-                        {r.attending ? "Yes" : "No"}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-ivory/70">{r.num_guests}</td>
-                    <td className="px-4 py-3 text-ivory/70">
-                      {r.hotel_needed ? "Yes" : "—"}
-                    </td>
-                    <td className="px-4 py-3 text-ivory/70">
-                      {r.arrival_time || "—"}
-                    </td>
-                    <td className="max-w-[140px] truncate px-4 py-3 text-ivory/70">
-                      {r.dietary_requirements || "—"}
-                    </td>
-                    <td className="max-w-[140px] truncate px-4 py-3 text-ivory/70">
-                      {r.note_to_couple || "—"}
-                    </td>
-                    <td className="px-4 py-3">
-                      <button
-                        type="button"
-                        onClick={() => setEditing(r)}
-                        className="rounded-full border border-gold/30 px-3 py-1 font-body text-[10px] tracking-wide text-gold uppercase"
+                        {renderResponseCells(latest, {
+                          displayName: group.displayName,
+                        })}
+                      </tr>
+                    );
+                  }
+
+                  return (
+                    <Fragment key={group.key}>
+                      <tr
+                        className={`border-b border-ivory/5 ${
+                          isMulti ? "bg-ivory/[0.03]" : ""
+                        } hover:bg-ivory/5`}
                       >
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                        {expanded ? (
+                          <>
+                            <td className="px-4 py-3 text-ivory/60" colSpan={2}>
+                              <button
+                                type="button"
+                                onClick={() => toggleGroup(group.key)}
+                                className="flex items-center gap-2 text-left"
+                              >
+                                <span
+                                  className="inline-block text-gold transition-transform"
+                                  style={{ transform: "rotate(90deg)" }}
+                                >
+                                  ▶
+                                </span>
+                                <span className="text-ivory">
+                                  {group.displayName}
+                                </span>
+                                <span className="rounded-full bg-gold/15 px-2 py-0.5 font-body text-[10px] text-gold">
+                                  {group.entries.length} submissions
+                                </span>
+                              </button>
+                            </td>
+                            <td
+                              className="px-4 py-3 text-xs text-ivory/40"
+                              colSpan={7}
+                            >
+                              Timeline · oldest → newest
+                            </td>
+                          </>
+                        ) : (
+                          <>
+                            <td className="px-4 py-3 text-ivory/60">
+                              <button
+                                type="button"
+                                onClick={() => toggleGroup(group.key)}
+                                className="flex items-center gap-2 text-left"
+                              >
+                                <span className="inline-block text-gold">▶</span>
+                                <span>{formatDate(latest.created_at)}</span>
+                              </button>
+                            </td>
+                            <td className="px-4 py-3 text-ivory">
+                              <button
+                                type="button"
+                                onClick={() => toggleGroup(group.key)}
+                                className="flex items-center gap-2 text-left"
+                              >
+                                <span>{group.displayName}</span>
+                                <span className="rounded-full bg-gold/15 px-2 py-0.5 font-body text-[10px] text-gold">
+                                  {group.entries.length}×
+                                </span>
+                              </button>
+                            </td>
+                            <td className="px-4 py-3">
+                              <span
+                                className={
+                                  latest.attending ? "text-sage" : "text-blush"
+                                }
+                              >
+                                {latest.attending ? "Yes" : "No"}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 text-ivory/70">
+                              {latest.num_guests}
+                            </td>
+                            <td className="px-4 py-3 text-ivory/70">
+                              {latest.hotel_needed ? "Yes" : "—"}
+                            </td>
+                            <td className="px-4 py-3 text-ivory/70">
+                              {latest.arrival_time || "—"}
+                            </td>
+                            <td className="max-w-[140px] truncate px-4 py-3 text-ivory/70">
+                              {latest.dietary_requirements || "—"}
+                            </td>
+                            <td className="max-w-[140px] truncate px-4 py-3 text-ivory/70">
+                              {latest.note_to_couple || "—"}
+                            </td>
+                            <td className="px-4 py-3">
+                              <button
+                                type="button"
+                                onClick={() => setEditing(latest)}
+                                className="rounded-full border border-gold/30 px-3 py-1 font-body text-[10px] tracking-wide text-gold uppercase"
+                              >
+                                Edit
+                              </button>
+                            </td>
+                          </>
+                        )}
+                      </tr>
+                      {expanded &&
+                        group.entries.map((response, index) => (
+                          <tr
+                            key={response.id}
+                            className="border-b border-ivory/5 hover:bg-ivory/5"
+                          >
+                            <td className="relative px-4 py-3 pl-10 text-ivory/60">
+                              <span
+                                className="absolute top-0 bottom-0 left-5 w-px bg-gold/25"
+                                aria-hidden
+                              />
+                              <span
+                                className="absolute top-1/2 left-[18px] h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-gold/60"
+                                aria-hidden
+                              />
+                              {formatDate(response.created_at)}
+                              {index === group.entries.length - 1 && (
+                                <span className="ml-2 font-body text-[10px] tracking-wide text-gold uppercase">
+                                  Latest
+                                </span>
+                              )}
+                            </td>
+                            <td className="px-4 py-3 text-ivory/50">—</td>
+                            <td className="px-4 py-3">
+                              <span
+                                className={
+                                  response.attending
+                                    ? "text-sage"
+                                    : "text-blush"
+                                }
+                              >
+                                {response.attending ? "Yes" : "No"}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 text-ivory/70">
+                              {response.num_guests}
+                            </td>
+                            <td className="px-4 py-3 text-ivory/70">
+                              {response.hotel_needed ? "Yes" : "—"}
+                            </td>
+                            <td className="px-4 py-3 text-ivory/70">
+                              {response.arrival_time || "—"}
+                            </td>
+                            <td className="max-w-[140px] truncate px-4 py-3 text-ivory/70">
+                              {response.dietary_requirements || "—"}
+                            </td>
+                            <td className="max-w-[140px] truncate px-4 py-3 text-ivory/70">
+                              {response.note_to_couple || "—"}
+                            </td>
+                            <td className="px-4 py-3">
+                              <button
+                                type="button"
+                                onClick={() => setEditing(response)}
+                                className="rounded-full border border-gold/30 px-3 py-1 font-body text-[10px] tracking-wide text-gold uppercase"
+                              >
+                                Edit
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                    </Fragment>
+                  );
+                })}
               </tbody>
             </table>
           </div>

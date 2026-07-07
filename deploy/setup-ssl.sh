@@ -21,8 +21,13 @@ rm -f /etc/nginx/sites-enabled/default
 nginx -t
 systemctl reload nginx
 
-certbot --nginx -d "$DOMAIN" -d "www.$DOMAIN" --non-interactive --agree-tos -m "admin@$DOMAIN" || \
-  certbot --nginx -d "$DOMAIN" -d "www.$DOMAIN"
+EMAIL="${CERTBOT_EMAIL:-}"
+if [ -z "$EMAIL" ]; then
+  echo "Tip: set CERTBOT_EMAIL=you@example.com for cert expiry notices"
+  certbot --nginx -d "$DOMAIN" -d "www.$DOMAIN" --register-unsafely-without-email --non-interactive --agree-tos
+else
+  certbot --nginx -d "$DOMAIN" -d "www.$DOMAIN" --non-interactive --agree-tos -m "$EMAIL"
+fi
 
 echo "==> HTTPS ready: https://$DOMAIN"
 echo "    Health: curl https://$DOMAIN/api/rsvp/health"

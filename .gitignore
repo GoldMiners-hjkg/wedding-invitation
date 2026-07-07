@@ -44,3 +44,6 @@ next-env.d.ts
 
 # local RSVP database (sqlite)
 /data/
+
+# original high-res hero videos (HEVC 4K backups)
+/media-backup/

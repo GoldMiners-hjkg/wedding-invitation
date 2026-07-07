@@ -61,6 +61,10 @@ export function VideoHero({ onEnter, heroImage }: VideoHeroProps) {
     const video = videoRef.current;
     if (!video) return;
 
+    video.setAttribute("webkit-playsinline", "true");
+    video.setAttribute("x5-playsinline", "true");
+    video.setAttribute("x5-video-player-type", "h5");
+
     setIsPlaying(false);
     video.load();
 

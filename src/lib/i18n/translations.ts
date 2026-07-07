@@ -21,6 +21,7 @@ const en: Translations = {
     groomLabel: "GROOM",
     brideLabel: "BRIDE",
     enter: "Enter",
+    tapToPlay: "Tap to play video",
   },
   transition: {
     quote:
@@ -299,6 +300,7 @@ const zhCN: Translations = {
     groomLabel: "GROOM",
     brideLabel: "BRIDE",
     enter: "进入",
+    tapToPlay: "点击播放视频",
   },
   transition: {
     quote: "当教堂拱廊遇见海平线——我们的永远，从这里开始。",
@@ -556,6 +558,7 @@ const zhTW: Translations = {
     groomLabel: "GROOM",
     brideLabel: "BRIDE",
     enter: "進入",
+    tapToPlay: "點擊播放視頻",
   },
   transition: {
     quote: "當教堂拱廊遇見海平線——我們的永遠，從這裡開始。",

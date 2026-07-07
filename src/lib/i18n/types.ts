@@ -38,6 +38,7 @@ export interface Translations {
     groomLabel: string;
     brideLabel: string;
     enter: string;
+    tapToPlay: string;
   };
   transition: { quote: string; continue: string; close: string; back: string; tapHint: string };
   info: {

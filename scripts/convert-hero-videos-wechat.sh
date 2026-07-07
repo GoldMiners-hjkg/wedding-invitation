@@ -30,9 +30,9 @@ for name in 1000024734.mp4 1000024735.mp4 1000024737.mp4; do
     cp "$src" "$backup"
   fi
 
-  echo "Converting $name → H.264 1080p (CRF 21)..."
+  echo "Converting $name → H.264 baseline 1080p (CRF 21)..."
   ffmpeg -y -hide_banner -loglevel error -stats -i "$src" \
-    -c:v libx264 -profile:v main -level 4.0 -pix_fmt yuv420p \
+    -c:v libx264 -profile:v baseline -level 3.1 -pix_fmt yuv420p \
     -vf "scale='min(1920,iw)':-2" \
     -crf 21 -preset medium \
     -c:a aac -b:a 128k -ar 48000 \

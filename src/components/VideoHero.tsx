@@ -1,10 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { COUPLE, HERO_HEADLINES } from "@/lib/couple";
 import { useLanguage } from "@/lib/i18n/context";
 import { MEDIA, WEDDING } from "@/lib/wedding";
+import {
+  configureInlineVideo,
+  isWeChatBrowser,
+  playVideoInWeChat,
+} from "@/lib/wechat-video";
 
 const textGlow =
   "[text-shadow:0_2px_16px_rgba(0,0,0,0.75),0_0_40px_rgba(0,0,0,0.45)]";
@@ -54,28 +59,64 @@ export function VideoHero({ onEnter, heroImage }: VideoHeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isWeChat, setIsWeChat] = useState(false);
+  const [needsTapToPlay, setNeedsTapToPlay] = useState(false);
+  const [videoFailed, setVideoFailed] = useState(false);
 
   const activeSrc = videos[activeIndex];
+
+  const tryPlay = useCallback(() => {
+    const video = videoRef.current;
+    if (!video || videoFailed) return;
+
+    configureInlineVideo(video);
+    void playVideoInWeChat(video)?.catch(() => {
+      if (isWeChatBrowser()) {
+        setNeedsTapToPlay(true);
+      }
+    });
+  }, [videoFailed]);
+
+  useEffect(() => {
+    setIsWeChat(isWeChatBrowser());
+  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    video.setAttribute("webkit-playsinline", "true");
-    video.setAttribute("x5-playsinline", "true");
-    video.setAttribute("x5-video-player-type", "h5");
-
     setIsPlaying(false);
+    setNeedsTapToPlay(false);
+    setVideoFailed(false);
+    configureInlineVideo(video);
     video.load();
+    tryPlay();
 
-    const play = () => {
-      void video.play().catch(() => {});
+    const onCanPlay = () => tryPlay();
+    video.addEventListener("canplay", onCanPlay);
+
+    const tapTimer = window.setTimeout(() => {
+      if (!video.paused && !video.ended) return;
+      if (isWeChatBrowser()) {
+        setNeedsTapToPlay(true);
+      }
+    }, 1500);
+
+    return () => {
+      video.removeEventListener("canplay", onCanPlay);
+      window.clearTimeout(tapTimer);
     };
+  }, [activeSrc, tryPlay]);
 
-    play();
-    video.addEventListener("canplay", play);
-    return () => video.removeEventListener("canplay", play);
-  }, [activeSrc]);
+  function handleTapPlay() {
+    setNeedsTapToPlay(false);
+    tryPlay();
+  }
+
+  function handleEnter() {
+    tryPlay();
+    onEnter();
+  }
 
   return (
     <section className="relative flex h-dvh w-full flex-col overflow-hidden">
@@ -93,18 +134,47 @@ export function VideoHero({ onEnter, heroImage }: VideoHeroProps) {
         />
       </div>
 
-      <video
-        ref={videoRef}
-        key={activeSrc}
-        className="absolute inset-0 z-[1] h-full w-full object-cover object-center"
-        src={activeSrc}
-        autoPlay
-        muted
-        playsInline
-        preload="auto"
-        onPlaying={() => setIsPlaying(true)}
-        onEnded={() => setActiveIndex((index) => (index + 1) % videos.length)}
-      />
+      {!videoFailed && (
+        <video
+          ref={videoRef}
+          key={activeSrc}
+          className="absolute inset-0 z-[1] h-full w-full object-cover object-center"
+          src={activeSrc}
+          poster={heroImage}
+          muted
+          playsInline
+          preload="auto"
+          autoPlay={!isWeChat}
+          onPlaying={() => {
+            setIsPlaying(true);
+            setNeedsTapToPlay(false);
+          }}
+          onPause={() => setIsPlaying(false)}
+          onError={() => {
+            setVideoFailed(true);
+            setIsPlaying(false);
+          }}
+          onEnded={() => setActiveIndex((index) => (index + 1) % videos.length)}
+        />
+      )}
+
+      {needsTapToPlay && !videoFailed && (
+        <button
+          type="button"
+          onClick={handleTapPlay}
+          className="absolute inset-0 z-[5] flex flex-col items-center justify-center gap-3 bg-black/25"
+          aria-label={t.hero.tapToPlay}
+        >
+          <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/80 bg-white/15 text-2xl text-white backdrop-blur-sm">
+            ▶
+          </span>
+          <span
+            className={`font-body text-xs tracking-[0.2em] text-white uppercase ${textGlow}`}
+          >
+            {t.hero.tapToPlay}
+          </span>
+        </button>
+      )}
 
       <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-b from-black/35 via-black/10 to-black/45" />
 
@@ -163,7 +233,7 @@ export function VideoHero({ onEnter, heroImage }: VideoHeroProps) {
 
         <button
           type="button"
-          onClick={onEnter}
+          onClick={handleEnter}
           className={`pointer-events-auto mx-auto min-w-[8.5rem] border border-white/90 bg-white/20 px-8 py-2.5 font-body text-[11px] font-medium tracking-[0.32em] text-white uppercase shadow-[0_6px_24px_rgba(0,0,0,0.3)] backdrop-blur-md transition-all hover:border-white hover:bg-white/30 active:scale-[0.98] sm:min-w-[9rem] sm:text-xs ${textGlow}`}
         >
           {t.hero.enter}

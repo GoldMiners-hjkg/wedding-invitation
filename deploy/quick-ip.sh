@@ -31,6 +31,8 @@ if grep -q "change-me-to-a-strong-password" .env; then
   exit 1
 fi
 
+grep -q '^ADMIN_COOKIE_SECURE=' .env || echo 'ADMIN_COOKIE_SECURE=false' >> .env
+
 mkdir -p data
 docker compose build
 docker compose up -d

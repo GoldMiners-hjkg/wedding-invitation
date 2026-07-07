@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { ADMIN_COOKIE_NAME } from "@/lib/admin-auth";
+import { ADMIN_COOKIE_NAME, adminCookieOptions } from "@/lib/admin-auth";
 
 function isValidPassword(password: string): boolean {
   const adminPassword = process.env.ADMIN_PASSWORD;
@@ -15,13 +15,7 @@ export async function POST(request: Request) {
   }
 
   const cookieStore = await cookies();
-  cookieStore.set(ADMIN_COOKIE_NAME, "authenticated", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7,
-  });
+  cookieStore.set(ADMIN_COOKIE_NAME, "authenticated", adminCookieOptions());
 
   return NextResponse.json({ success: true });
 }

@@ -7,8 +7,10 @@ import { useLanguage } from "@/lib/i18n/context";
 import { MEDIA, WEDDING } from "@/lib/wedding";
 import {
   configureInlineVideo,
+  initWeChatBridgeEarly,
   isWeChatBrowser,
   playVideoInWeChat,
+  scheduleWeChatAutoplay,
 } from "@/lib/wechat-video";
 
 const textGlow =
@@ -59,27 +61,21 @@ export function VideoHero({ onEnter, heroImage }: VideoHeroProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isWeChat, setIsWeChat] = useState(false);
   const [needsTapToPlay, setNeedsTapToPlay] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
 
   const activeSrc = videos[activeIndex];
 
+  useEffect(() => {
+    initWeChatBridgeEarly();
+  }, []);
+
   const tryPlay = useCallback(() => {
     const video = videoRef.current;
     if (!video || videoFailed) return;
-
     configureInlineVideo(video);
-    void playVideoInWeChat(video)?.catch(() => {
-      if (isWeChatBrowser()) {
-        setNeedsTapToPlay(true);
-      }
-    });
+    void playVideoInWeChat(video);
   }, [videoFailed]);
-
-  useEffect(() => {
-    setIsWeChat(isWeChatBrowser());
-  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -90,23 +86,15 @@ export function VideoHero({ onEnter, heroImage }: VideoHeroProps) {
     setVideoFailed(false);
     configureInlineVideo(video);
     video.load();
-    tryPlay();
 
-    const onCanPlay = () => tryPlay();
-    video.addEventListener("canplay", onCanPlay);
-
-    const tapTimer = window.setTimeout(() => {
-      if (!video.paused && !video.ended) return;
+    const stopAutoplay = scheduleWeChatAutoplay(video, () => {
       if (isWeChatBrowser()) {
         setNeedsTapToPlay(true);
       }
-    }, 1500);
+    });
 
-    return () => {
-      video.removeEventListener("canplay", onCanPlay);
-      window.clearTimeout(tapTimer);
-    };
-  }, [activeSrc, tryPlay]);
+    return stopAutoplay;
+  }, [activeSrc]);
 
   function handleTapPlay() {
     setNeedsTapToPlay(false);
@@ -141,10 +129,11 @@ export function VideoHero({ onEnter, heroImage }: VideoHeroProps) {
           className="absolute inset-0 z-[1] h-full w-full object-cover object-center"
           src={activeSrc}
           poster={heroImage}
+          autoPlay
           muted
           playsInline
+          loop={false}
           preload="auto"
-          autoPlay={!isWeChat}
           onPlaying={() => {
             setIsPlaying(true);
             setNeedsTapToPlay(false);

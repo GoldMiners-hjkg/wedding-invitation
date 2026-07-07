@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
+import { WeChatBridgeScript } from "@/components/WeChatBridgeScript";
 
 export const metadata: Metadata = {
   title: "Wedding Invitation",
@@ -21,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className="h-full" suppressHydrationWarning>
       <head>
+        <WeChatBridgeScript />
         <link
           rel="preload"
           href="/fonts/genryu/GenRyuMin-TW-R.woff2"

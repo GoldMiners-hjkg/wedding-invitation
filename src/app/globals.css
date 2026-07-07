@@ -1,0 +1,386 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "GenRyuMin TW";
+  src: url("/fonts/genryu/GenRyuMin-TW-R.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GenRyuMin TW";
+  src: url("/fonts/genryu/GenRyuMin-TW-M.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GenRyuMin TW";
+  src: url("/fonts/genryu/GenRyuMin-TW-B.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme inline {
+  /* French vintage wedding — dusty blue, wine red, gold */
+  --color-sky: #b8cadc;
+  --color-sky-light: #d4e2ed;
+  --color-sky-pale: #ecf2f8;
+  --color-cream: #faf8f5;
+  --color-cream-soft: #f2f6fa;
+  --color-wine: #7a2239;
+  --color-wine-light: #96324f;
+  --color-wine-deep: #5c1828;
+  --color-gold: #c9a227;
+  --color-gold-light: #dfc56a;
+
+  /* Legacy tokens remapped to vintage palette */
+  --color-pearl: #faf8f5;
+  --color-ivory-soft: #f0f5f9;
+  --color-linen: #e8f0f6;
+  --color-blush: #e8c4cc;
+  --color-powder: #d4e4f0;
+  --color-mist: #c5d8e8;
+  --color-champagne: #cddae6;
+  --color-charcoal: #6b3045;
+  --color-silver: #d8e4ed;
+
+  --font-heading: "GenRyuMin TW", "Source Han Serif TC", serif;
+  --font-body: "GenRyuMin TW", "Source Han Serif TC", serif;
+  --font-brush: "GenRyuMin TW", "Source Han Serif TC", serif;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Textured dusty-blue paper — no stripes */
+.vintage-bg,
+.paper-linen {
+  background-color: #b8cad8;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E"),
+    radial-gradient(
+      ellipse 95% 65% at 50% -5%,
+      rgba(255, 255, 255, 0.28) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 55% 45% at 12% 88%,
+      rgba(255, 255, 255, 0.12) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 88% 72%,
+      rgba(70, 90, 110, 0.04) 0%,
+      transparent 48%
+    ),
+    linear-gradient(172deg, #c8d8e6 0%, #b4c9da 48%, #c0d2e0 100%);
+  background-blend-mode: overlay, normal, normal, normal, normal;
+}
+
+body {
+  background-color: #b8cad8;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E"),
+    linear-gradient(172deg, #c8d8e6 0%, #b4c9da 48%, #c0d2e0 100%);
+  background-blend-mode: overlay, normal;
+  color: var(--color-wine);
+  font-family: var(--font-body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Center invitation column on wide screens */
+.vintage-shell {
+  max-width: 480px;
+}
+
+@media (min-width: 520px) {
+  .vintage-shell {
+    box-shadow:
+      -16px 0 40px rgba(70, 90, 110, 0.12),
+      16px 0 40px rgba(70, 90, 110, 0.12);
+  }
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-brush {
+  font-family: var(--font-brush);
+  font-weight: 500;
+  font-synthesis: none;
+  letter-spacing: 0.06em;
+}
+
+/* Vintage letterpress ink texture */
+.letterpress-ink,
+.font-heading,
+.font-body,
+.font-brush,
+.text-vintage-title,
+.text-eyebrow,
+.text-body-vintage,
+.text-caption-vintage {
+  text-shadow:
+    0.03em 0.04em 0 rgba(92, 24, 40, 0.14),
+    -0.015em -0.015em 0 rgba(255, 255, 255, 0.28);
+}
+.theme-panel {
+  background-color: rgba(250, 248, 245, 0.94);
+  border: 1px solid rgba(139, 40, 71, 0.12);
+  box-shadow: 0 8px 32px rgba(107, 48, 69, 0.08);
+}
+
+.text-vintage-title {
+  font-family: var(--font-brush);
+  font-weight: 500;
+  color: var(--color-wine);
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+}
+
+/* Legibility on textured blue — contrast & weight, not background panels */
+.text-eyebrow {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-wine-deep);
+}
+
+.text-body-vintage {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--color-wine);
+}
+
+.text-caption-vintage {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--color-wine-deep);
+}
+
+.vintage-text-halo {
+  text-shadow:
+    0.03em 0.04em 0 rgba(92, 24, 40, 0.14),
+    -0.015em -0.015em 0 rgba(255, 255, 255, 0.32),
+    0 0 10px rgba(255, 255, 255, 0.35);
+}
+
+.paper-ivory {
+  background-color: var(--color-cream-soft);
+}
+
+@keyframes ken-burns {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    transform: scale(1.08) translate(-1%, -0.5%);
+  }
+}
+
+.animate-ken-burns {
+  animation: ken-burns 24s ease-in-out infinite alternate;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes envelope-pop-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(28px) scale(0.48);
+  }
+  62% {
+    transform: translateX(-50%) translateY(-6px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@keyframes envelope-flap-open {
+  0% {
+    transform: rotateX(0deg);
+  }
+  55% {
+    transform: rotateX(-95deg);
+  }
+  100% {
+    transform: rotateX(-168deg);
+  }
+}
+
+@keyframes envelope-inner-reveal {
+  0% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.envelope-scene {
+  perspective: 820px;
+  perspective-origin: 50% 36%;
+}
+
+.envelope-flap-flip {
+  transform-style: preserve-3d;
+}
+
+.envelope-flap-open {
+  animation: envelope-flap-open 0.85s cubic-bezier(0.34, 1.02, 0.48, 1) forwards;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.envelope-inner-reveal {
+  animation: envelope-inner-reveal 0.85s ease-out forwards;
+}
+
+@keyframes envelope-vanish {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.78);
+  }
+}
+
+.envelope-pop-in {
+  animation: envelope-pop-in 0.85s cubic-bezier(0.34, 1.28, 0.64, 1) forwards;
+  opacity: 0;
+}
+
+.envelope-vanish {
+  animation: envelope-vanish 0.65s ease-in forwards;
+}
+
+@keyframes palm-sway {
+  0%,
+  100% {
+    transform: rotate(-2.8deg);
+  }
+  50% {
+    transform: rotate(2.8deg);
+  }
+}
+
+@keyframes palm-sway-alt {
+  0%,
+  100% {
+    transform: rotate(2.2deg);
+  }
+  50% {
+    transform: rotate(-2.2deg);
+  }
+}
+
+@keyframes wine-glass-sway {
+  0%,
+  100% {
+    transform: rotate(-7deg);
+  }
+  25% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(7deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+}
+
+.animate-palm-sway {
+  transform-origin: 50% 96%;
+  animation: palm-sway 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-palm-sway-alt {
+  transform-origin: 50% 96%;
+  animation: palm-sway-alt 8.5s ease-in-out infinite;
+  animation-delay: 1s;
+  will-change: transform;
+}
+
+.animate-wine-glass-sway {
+  transform-origin: 50% 88%;
+  animation: wine-glass-sway 3.8s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-wine-glass-sway-alt {
+  transform-origin: 50% 88%;
+  animation: wine-glass-sway 4.6s ease-in-out infinite;
+  animation-delay: 1.4s;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ken-burns {
+    animation: none;
+    transform: none;
+    opacity: 1;
+  }
+
+  .envelope-pop-in,
+  .envelope-flap-open,
+  .envelope-vanish {
+    animation: none;
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+
+  .animate-palm-sway,
+  .animate-palm-sway-alt,
+  .animate-wine-glass-sway,
+  .animate-wine-glass-sway-alt {
+    animation: none;
+    transform: none;
+  }
+}

@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+data
+.env*
+!.env.production.example
+README.md
+deploy
+*.md
+.DS_Store

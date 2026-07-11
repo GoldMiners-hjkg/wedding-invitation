@@ -13,13 +13,13 @@ export function LanguageSwitcher() {
   }
 
   return (
-    <div className="pointer-events-auto fixed top-4 right-4 z-[9999] flex rounded-full border border-wine/20 bg-cream/85 p-1 shadow-[0_4px_24px_rgba(107,48,69,0.1)] backdrop-blur-md">
+    <div className="pointer-events-auto fixed top-3 right-3 z-[9999] flex rounded-full border border-wine/20 bg-cream/85 p-0.5 shadow-[0_2px_12px_rgba(107,48,69,0.1)] backdrop-blur-md">
       {LOCALES.map((loc) => (
         <button
           key={loc.id}
           type="button"
           onClick={() => setLocale(loc.id)}
-          className={`min-h-[44px] min-w-[44px] rounded-full px-2.5 py-1.5 font-body text-xs font-medium tracking-wide transition-all ${
+          className={`min-h-7 min-w-7 rounded-full px-1.5 py-0.5 font-body text-[10px] font-medium tracking-wide transition-all ${
             locale === loc.id
               ? "bg-sky-light text-wine-deep"
               : "text-wine-deep/75 hover:text-wine"

@@ -1,6 +1,6 @@
 export const MEDIA = {
   heroImage: "/mmexport1782503925618.jpg",
-  heroVideos: ["/1000024737.mp4"] as const,
+  heroVideos: ["/final.mp4"] as const,
   venue: "/image0.jpeg",
   hotelPhotos: ["/image0.jpeg", "/image1.jpeg"] as const,
   couple: "/couple-forest.jpg",

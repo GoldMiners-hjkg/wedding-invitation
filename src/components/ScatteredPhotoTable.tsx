@@ -19,20 +19,23 @@ const SCATTER = [
   { x: 42, y: 54, rotate: -9, scale: 0.9, z: 7 },
 ] as const;
 
-const ENVELOPE = { left: 50, top: 54, width: 52 } as const;
+const ENVELOPE = { left: 50, top: 43, width: 64 } as const;
 
 function getEnvelopeMouth() {
   const heightPct = ENVELOPE.width * (1 / ENVELOPE_ASPECT);
-  return { x: ENVELOPE.left, y: ENVELOPE.top + heightPct * ENVELOPE_FLAP_RATIO * 0.92 };
+  return {
+    x: ENVELOPE.left,
+    y: ENVELOPE.top + heightPct * ENVELOPE_FLAP_RATIO,
+  };
 }
 
-const ENVELOPE_OPEN_DELAY_MS = 720;
-const ENVELOPE_FLAP_MS = 850;
-const PHOTO_START_DELAY_MS = ENVELOPE_OPEN_DELAY_MS + ENVELOPE_FLAP_MS + 150;
-const BURST_DURATION_MS = 820;
-const BURST_STAGGER_MS = 130;
-const ENVELOPE_VANISH_MS = 650;
-const BURST_EASING = "cubic-bezier(0.33, 1, 0.28, 1)";
+const ENVELOPE_OPEN_DELAY_MS = 650;
+const ENVELOPE_FLAP_MS = 760;
+const PHOTO_START_DELAY_MS = ENVELOPE_OPEN_DELAY_MS + ENVELOPE_FLAP_MS + 60;
+const BURST_DURATION_MS = 860;
+const BURST_STAGGER_MS = 110;
+const ENVELOPE_VANISH_MS = 560;
+const BURST_EASING = "cubic-bezier(0.22, 0.76, 0.24, 1)";
 
 const SCROLL_LOCK_PX = 10;
 const TAP_MAX_MOVE_PX = 12;
@@ -120,12 +123,24 @@ export function ScatteredPhotoTable({
       const animation = card.animate(
         [
           {
-            transform: `translate3d(${dx}px, ${dy}px, 0) rotate(0deg) scale(0.1)`,
+            transform: `translate3d(${dx}px, ${dy}px, 0) rotate(0deg) scale(0.34)`,
             opacity: 0,
+            offset: 0,
+          },
+          {
+            transform: `translate3d(${dx * 0.78}px, ${dy * 0.78 - 18}px, 0) rotate(${layout.rotate * 0.22}deg) scale(0.7)`,
+            opacity: 1,
+            offset: 0.36,
+          },
+          {
+            transform: `translate3d(0px, -3px, 0) rotate(${layout.rotate}deg) scale(1.015)`,
+            opacity: 1,
+            offset: 0.84,
           },
           {
             transform: `translate3d(0px, 0px, 0) rotate(${layout.rotate}deg) scale(1)`,
             opacity: 1,
+            offset: 1,
           },
         ],
         {
@@ -170,18 +185,20 @@ export function ScatteredPhotoTable({
 
   useEffect(() => {
     if (reduceMotion) {
-      setRevealedCount(photos.length);
-      setBurstComplete(true);
-      setEnvelopeHidden(true);
-      photos.forEach((_, i) => {
-        const card = cardRefs.current[i];
-        if (!card) return;
-        const layout = SCATTER[i % SCATTER.length];
-        card.style.visibility = "visible";
-        card.style.opacity = "1";
-        card.style.transform = `rotate(${layout.rotate}deg) scale(1)`;
+      const frame = window.requestAnimationFrame(() => {
+        setRevealedCount(photos.length);
+        setBurstComplete(true);
+        setEnvelopeHidden(true);
+        photos.forEach((_, i) => {
+          const card = cardRefs.current[i];
+          if (!card) return;
+          const layout = SCATTER[i % SCATTER.length];
+          card.style.visibility = "visible";
+          card.style.opacity = "1";
+          card.style.transform = `rotate(${layout.rotate}deg) scale(1)`;
+        });
       });
-      return;
+      return () => window.cancelAnimationFrame(frame);
     }
     if (!tableReady) return;
 
@@ -300,12 +317,12 @@ export function ScatteredPhotoTable({
 
       {!envelopeHidden && !reduceMotion && (
         <div
-          className={`pointer-events-none absolute left-1/2 z-[8] w-[52%] ${
+          className={`pointer-events-none absolute left-1/2 z-[8] w-[64%] max-w-[260px] ${
             envelopeEnter ? "envelope-pop-in" : "opacity-0"
           } ${envelopeVanish ? "envelope-vanish" : ""}`}
-          style={{ top: `${ENVELOPE.top - 8}%` }}
+          style={{ top: `${ENVELOPE.top}%` }}
         >
-          <Envelope open={envelopeOpen} className="h-auto w-full drop-shadow-lg" />
+          <Envelope open={envelopeOpen} className="h-auto w-full" />
         </div>
       )}
 

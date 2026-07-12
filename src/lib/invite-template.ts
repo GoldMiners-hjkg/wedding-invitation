@@ -13,7 +13,7 @@ const P = "/images/invite/photos";
 const D = "/images/invite/decor";
 
 /** Design canvas size from the original H5 (px) */
-export const INVITE_DESIGN = { width: 375, height: 5700 } as const;
+export const INVITE_DESIGN = { width: 375, height: 5920 } as const;
 
 /** Replace these paths with your own files */
 export const INVITE_PHOTOS = {
@@ -29,7 +29,7 @@ export const INVITE_PHOTOS = {
   cutout: `${P}/cutout.png`,
   wide1: `${P}/wide-1.jpg`,
   wide2: `${P}/wide-2.jpg`,
-  calendarPhoto: `${P}/calendar-photo.jpg`,
+  calendarPhoto: `/download/wedding01.png`,
   /** Hotel venue photos (replaces map) */
   hotelA: MEDIA.hotelPhotos[0],
   hotelB: MEDIA.hotelPhotos[1],

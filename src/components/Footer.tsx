@@ -1,7 +1,7 @@
 "use client";
 
 import { CoupleNames } from "./CoupleNames";
-import { CrestOrnament, DividerOrnament } from "@/components/editorial/Ornaments";
+import { CrestOrnament } from "@/components/editorial/Ornaments";
 import { useLanguage } from "@/lib/i18n/context";
 
 export function Footer() {
@@ -14,8 +14,6 @@ export function Footer() {
 
       <CoupleNames size="medium" theme="light" />
       <p className="text-eyebrow mt-5">{wedding.dateShort}</p>
-
-      <DividerOrnament className="mx-auto mt-8" />
 
       <p className="text-eyebrow mt-8 opacity-80">{footer.withLove}</p>
     </footer>

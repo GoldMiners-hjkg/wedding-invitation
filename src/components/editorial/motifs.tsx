@@ -1,7 +1,5 @@
 "use client";
 
-import { DividerOrnament } from "./Ornaments";
-
 /** Three cathedral arches — kept for optional use */
 export function CathedralArch({
   className = "",
@@ -63,39 +61,8 @@ export function EditorialSectionHeader({
   className?: string;
 }) {
   return (
-    <div className={`flex flex-col items-center gap-6 ${className}`}>
-      <DividerOrnament />
+    <div className={`flex flex-col items-center gap-3 ${className}`}>
       {children}
-    </div>
-  );
-}
-
-export function SectionDivider({
-  from = "sky",
-  to = "cream",
-}: {
-  from?: "sky" | "sky-light" | "cream" | "pearl" | "linen" | "ivory-soft" | "powder";
-  to?: "sky" | "sky-light" | "cream" | "pearl" | "linen" | "ivory-soft" | "powder";
-}) {
-  const bgMap = {
-    sky: "bg-sky",
-    "sky-light": "bg-sky-light",
-    cream: "bg-cream/80",
-    pearl: "bg-pearl",
-    linen: "bg-linen",
-    "ivory-soft": "bg-ivory-soft",
-    powder: "bg-powder/30",
-  };
-
-  return (
-    <div
-      className={`relative flex h-16 w-full items-center justify-center ${bgMap[from]}`}
-      aria-hidden
-    >
-      <div
-        className={`absolute inset-x-0 bottom-0 h-6 ${bgMap[to]}`}
-        style={{ clipPath: "ellipse(55% 100% at 50% 100%)" }}
-      />
     </div>
   );
 }

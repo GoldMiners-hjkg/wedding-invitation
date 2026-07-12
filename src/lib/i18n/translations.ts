@@ -1,6 +1,7 @@
 import type { Locale, Translations } from "./types";
+import { inviteCopy } from "./invite";
 
-const en: Translations = {
+const en: Omit<Translations, "invite"> = {
   meta: {
     title: "Wedding Invitation",
     description: "You are cordially invited to celebrate with us.",
@@ -283,7 +284,7 @@ const en: Translations = {
   },
 };
 
-const zhCN: Translations = {
+const zhCN: Omit<Translations, "invite"> = {
   meta: { title: "婚礼邀请函", description: "诚挚邀请您与我们共同庆祝。" },
   wedding: {
     date: "2027年1月24日 星期日",
@@ -541,7 +542,7 @@ const zhCN: Translations = {
   },
 };
 
-const zhTW: Translations = {
+const zhTW: Omit<Translations, "invite"> = {
   meta: { title: "婚禮邀請函", description: "誠摯邀請您與我們共同慶祝。" },
   wedding: {
     date: "2027年1月24日 星期日",
@@ -800,9 +801,9 @@ const zhTW: Translations = {
 };
 
 export const translations: Record<Locale, Translations> = {
-  en,
-  "zh-CN": zhCN,
-  "zh-TW": zhTW,
+  en: { ...en, invite: inviteCopy.en },
+  "zh-CN": { ...zhCN, invite: inviteCopy["zh-CN"] },
+  "zh-TW": { ...zhTW, invite: inviteCopy["zh-TW"] },
 };
 
 export function interpolate(

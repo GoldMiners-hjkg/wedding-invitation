@@ -5,7 +5,7 @@ export const MEDIA = {
   hotelPhotos: ["/image0.jpeg", "/image1.jpeg"] as const,
   couple: "/couple-forest.jpg",
   /** Date section — photo + calendar composite */
-  weddingDate: "/images/wedding-date-calendar.png?v=7",
+  weddingDate: "/images/wedding-date-calendar.png?v=8",
   /** Page 2 — tap-to-enlarge gallery */
   transitionGallery: [
     "/couple-forest.jpg",

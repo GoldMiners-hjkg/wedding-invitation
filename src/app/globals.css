@@ -1,6 +1,14 @@
 @import "tailwindcss";
 
 @font-face {
+  font-family: "MAXWELL Light";
+  src: url("/images/invite/fonts/MAXWELL-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "GenRyuMin TW";
   src: url("/fonts/genryu/GenRyuMin-TW-R.woff2") format("woff2");
   font-weight: 400;
@@ -428,5 +436,407 @@ body {
   .animate-wine-glass-sway-alt {
     animation: none;
     transform: none;
+  }
+}
+
+/* ——— Invite template A17073ae6c057 (scaled 375px canvas) ——— */
+.invite-page {
+  min-height: 100dvh;
+  background: #d8d4cc;
+}
+
+.invite-shell {
+  background: #ffffff;
+  color: #111;
+  box-shadow:
+    -12px 0 32px rgba(0, 0, 0, 0.06),
+    12px 0 32px rgba(0, 0, 0, 0.06);
+  overflow-x: hidden;
+}
+
+.invite-root {
+  position: relative;
+}
+
+.invite-canvas {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #fff;
+}
+
+.invite-abs {
+  position: absolute;
+  z-index: 2;
+}
+
+.invite-abs img {
+  pointer-events: none;
+  user-select: none;
+}
+
+.invite-block-black {
+  z-index: 1;
+  background: #000;
+}
+
+.invite-hero-media {
+  z-index: 1;
+  overflow: hidden;
+  background: #111;
+}
+
+.invite-hero-tap {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.22);
+  color: #fff;
+  font-size: 1.5rem;
+  border: 0;
+}
+
+.invite-dot {
+  z-index: 3;
+  border-radius: 999px;
+  background: #baa58a;
+}
+
+.invite-zh {
+  z-index: 4;
+  font-family: "GenRyuMin TW", "Source Han Serif TC", "Songti SC", serif;
+  font-size: clamp(11px, 3.2vw, 13px);
+  line-height: 1.35;
+  text-align: center;
+  white-space: pre-line;
+}
+
+.invite-zh--light {
+  font-weight: 400;
+}
+
+.invite-zh--md {
+  font-size: clamp(13px, 4vw, 16px);
+}
+
+.invite-en {
+  z-index: 4;
+  font-family: "MAXWELL Light", "Times New Roman", serif;
+  font-size: clamp(11px, 3.2vw, 13px);
+  line-height: 1.3;
+  text-align: center;
+  white-space: pre-line;
+  letter-spacing: 0.06em;
+}
+
+.invite-en--sm {
+  font-size: clamp(10px, 2.9vw, 12px);
+}
+
+.invite-ink-white {
+  color: #fff;
+}
+
+.invite-hero-name {
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55), 0 0 20px rgba(0, 0, 0, 0.35);
+}
+
+.invite-ink-black {
+  color: #111;
+}
+
+.invite-countdown-wrap {
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invite-countdown {
+  display: flex;
+  gap: 0.85rem;
+  color: #fff;
+}
+
+.invite-countdown__cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 2.4rem;
+}
+
+.invite-countdown__num {
+  font-family: "MAXWELL Light", "Times New Roman", serif;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(16px, 5vw, 20px);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+
+.invite-countdown__label {
+  margin-top: 0.2rem;
+  font-family: "GenRyuMin TW", serif;
+  font-size: 0.65rem;
+  opacity: 0.85;
+}
+
+.invite-calendar-wrap {
+  z-index: 5;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 6%;
+}
+
+.invite-calendar {
+  width: 86%;
+  color: #111;
+}
+
+.invite-calendar__head {
+  position: relative;
+  margin-bottom: 0.55rem;
+  text-align: left;
+}
+
+.invite-calendar__md {
+  font-family: "MAXWELL Light", "Times New Roman", serif;
+  font-size: clamp(18px, 5.5vw, 24px);
+  letter-spacing: 0.08em;
+}
+
+.invite-calendar__year {
+  position: absolute;
+  right: 0;
+  top: -0.15rem;
+  font-family: "MAXWELL Light", "Times New Roman", serif;
+  font-size: clamp(28px, 10vw, 42px);
+  line-height: 1;
+  opacity: 0.12;
+  letter-spacing: 0.04em;
+}
+
+.invite-calendar__week,
+.invite-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem 0;
+  text-align: center;
+  font-size: clamp(10px, 2.8vw, 12px);
+  font-family: "GenRyuMin TW", serif;
+}
+
+.invite-calendar__week {
+  color: rgba(17, 17, 17, 0.55);
+  margin-bottom: 0.25rem;
+}
+
+.invite-calendar__day {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+}
+
+.invite-calendar__day--active {
+  border: 1px solid #111;
+  border-radius: 999px;
+}
+
+.invite-map {
+  z-index: 5;
+  overflow: hidden;
+}
+
+.invite-map__link {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+}
+
+.invite-map__label {
+  position: absolute;
+  left: 50%;
+  bottom: 0.65rem;
+  transform: translateX(-50%);
+  padding: 0.3rem 0.75rem;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  font-family: "GenRyuMin TW", serif;
+}
+
+.invite-rsvp {
+  position: relative;
+  z-index: 2;
+  padding: 1.5rem 1rem 0.5rem;
+  background: #fff;
+  color: #111;
+  --color-wine: #baa58a;
+  --color-wine-light: #c4b09a;
+  --color-wine-deep: #111111;
+  --color-sky-light: #f4f0ea;
+  --color-cream: #ffffff;
+  --color-blush: #c4a090;
+  --color-charcoal: #111111;
+}
+
+.invite-rsvp .bg-cream,
+.invite-rsvp section {
+  background: transparent !important;
+}
+
+.invite-rsvp .letterpress-ink,
+.invite-rsvp .font-heading,
+.invite-rsvp .font-body,
+.invite-rsvp .font-brush,
+.invite-rsvp .text-vintage-title,
+.invite-rsvp .text-eyebrow,
+.invite-rsvp .text-body-vintage,
+.invite-rsvp .text-caption-vintage,
+.invite-rsvp .vintage-text-halo {
+  text-shadow: none !important;
+}
+
+.invite-rsvp .text-vintage-title,
+.invite-rsvp .text-eyebrow,
+.invite-rsvp .text-body-vintage,
+.invite-rsvp .text-caption-vintage,
+.invite-rsvp .vintage-text-halo,
+.invite-rsvp h2,
+.invite-rsvp h3,
+.invite-rsvp label,
+.invite-rsvp p,
+.invite-rsvp span,
+.invite-rsvp button,
+.invite-rsvp input,
+.invite-rsvp textarea,
+.invite-rsvp select {
+  color: #111 !important;
+  text-shadow: none !important;
+}
+
+.invite-rsvp .text-eyebrow,
+.invite-rsvp .text-caption-vintage,
+.invite-rsvp label {
+  color: #111 !important;
+  opacity: 1;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: none;
+}
+
+.invite-rsvp .text-body-vintage {
+  color: #111 !important;
+}
+
+.invite-rsvp .text-vintage-title {
+  color: #111 !important;
+  font-family: "GenRyuMin TW", "Source Han Serif TC", serif;
+  font-weight: 500;
+}
+
+.invite-rsvp .text-wine,
+.invite-rsvp .text-wine-deep,
+.invite-rsvp .text-wine-light:not(.ml-1) {
+  color: #111 !important;
+}
+
+.invite-rsvp span.text-wine-light,
+.invite-rsvp .text-blush {
+  color: #baa58a !important;
+}
+
+
+.invite-rsvp input,
+.invite-rsvp textarea,
+.invite-rsvp select {
+  border-color: rgba(186, 165, 138, 0.65) !important;
+  background: #fff !important;
+  color: #111 !important;
+}
+
+.invite-rsvp input::placeholder,
+.invite-rsvp textarea::placeholder {
+  color: rgba(17, 17, 17, 0.4) !important;
+}
+
+.invite-rsvp button[type="submit"] {
+  background: #baa58a !important;
+  border-color: #baa58a !important;
+  color: #fff !important;
+}
+
+.invite-rsvp button:not([type="submit"]) {
+  color: #111 !important;
+  border-color: rgba(186, 165, 138, 0.55) !important;
+}
+
+.invite-rsvp .border-wine\/30,
+.invite-rsvp .border-wine\/20,
+.invite-rsvp .border-wine\/15,
+.invite-rsvp .border-wine\/45,
+.invite-rsvp .border-wine {
+  border-color: rgba(186, 165, 138, 0.55) !important;
+}
+
+.invite-rsvp .bg-wine {
+  background-color: #baa58a !important;
+}
+
+.invite-rsvp .bg-sky-light {
+  background-color: #f4f0ea !important;
+}
+
+.invite-rsvp .text-cream {
+  color: #fff !important;
+}
+
+.invite-rsvp .text-blush,
+.invite-rsvp .text-wine-light {
+  color: #baa58a !important;
+}
+
+.invite-closing {
+  padding: 1.25rem 1rem 2.5rem;
+  background: #fff;
+  text-align: center;
+}
+
+.invite-bgm {
+  position: fixed;
+  top: 0.85rem;
+  right: max(0.85rem, calc(50% - 215px + 0.85rem));
+  z-index: 40;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(186, 165, 138, 0.7);
+  background: rgba(255, 255, 255, 0.88);
+  color: #baa58a;
+  font-size: 0.85rem;
+  line-height: 1;
+  backdrop-filter: blur(6px);
+}
+
+.invite-bgm--on {
+  background: #baa58a;
+  color: #fff;
+  border-color: #baa58a;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .invite-bgm--on {
+    animation: invite-spin 6s linear infinite;
+  }
+}
+
+@keyframes invite-spin {
+  to {
+    transform: rotate(360deg);
   }
 }

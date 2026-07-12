@@ -3,14 +3,14 @@ import "./globals.css";
 import { Providers } from "@/components/Providers";
 
 export const metadata: Metadata = {
-  title: "Wedding Invitation",
-  description: "You are cordially invited to celebrate with us.",
+  title: "王哲 & 莊采縈 · 婚礼邀请",
+  description: "诚邀您见证我们的幸福",
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#B8CADC",
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({

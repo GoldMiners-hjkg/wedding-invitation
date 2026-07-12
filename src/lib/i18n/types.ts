@@ -126,4 +126,33 @@ export interface Translations {
     food: GuideItem[];
     fun: GuideItem[];
   };
+  invite: {
+    heroTag: string;
+    inviteTitle: string;
+    inviteEn: string;
+    stripQuote: string;
+    letter: string;
+    letterSecondary: string;
+    heartPoem: string;
+    heartPoemSecondary: string;
+    welcomeEn: string;
+    stackQuote1: string;
+    stackQuote2: string;
+    stackQuote3: string;
+    onlyYou: string;
+    spring: string;
+    meet: string;
+    meetSecondary: string;
+    dateLong: string;
+    happiness: string;
+    sweetEn: string;
+    pride: string;
+    openNav: string;
+    playVideo: string;
+    countdownDays: string;
+    countdownHours: string;
+    countdownMins: string;
+    countdownSecs: string;
+    weekdays: [string, string, string, string, string, string, string];
+  };
 }

@@ -2,72 +2,84 @@
 
 import Image from "next/image";
 
-/** AI-generated envelope — single source, split for flap animation */
-export const ENVELOPE_ASPECT = 1094 / 722;
-export const ENVELOPE_FLAP_RATIO = 317 / 722;
+/** Photo assets from option-1-coastal-pearl (closed left / open right). */
+export const ENVELOPE_ASPECT = 752 / 883; // open state (taller with flap up)
+export const ENVELOPE_FLAP_RATIO = 0.42; // mouth sits below open flap
+
+const CLOSED_SRC = "/images/envelope/coastal-pearl-closed.png";
+const OPEN_SRC = "/images/envelope/coastal-pearl-open.png";
 
 interface EnvelopeProps {
   className?: string;
   open?: boolean;
+  /** Split layers so photos can draw out between back and pocket */
+  layer?: "full" | "back" | "pocket";
 }
 
-export function Envelope({ className = "", open = false }: EnvelopeProps) {
+export function Envelope({
+  className = "",
+  open = false,
+  layer = "full",
+}: EnvelopeProps) {
   return (
     <div
-      className={`envelope-scene relative w-full drop-shadow-[0_10px_28px_rgba(68,68,68,0.16)] ${className}`}
+      className={`coastal-envelope relative w-full ${open ? "coastal-envelope--open" : ""} ${className}`}
       style={{ aspectRatio: String(ENVELOPE_ASPECT) }}
       aria-hidden
     >
-      <div
-        className="absolute inset-x-0 bottom-0"
-        style={{ height: `${(1 - ENVELOPE_FLAP_RATIO) * 100 + 1.2}%` }}
-      >
-        <Image
-          src="/images/envelope-ai-body.png"
-          alt=""
-          fill
-          unoptimized
-          draggable={false}
-          className="object-contain object-bottom"
-          sizes="280px"
-        />
-      </div>
-
-      <div
-        className={`pointer-events-none absolute z-[1] ${
-          open ? "envelope-inner-reveal" : "opacity-0"
-        }`}
-        style={{
-          left: "20%",
-          right: "20%",
-          top: `${ENVELOPE_FLAP_RATIO * 100 - 5.5}%`,
-          height: "13%",
-          background:
-            "linear-gradient(180deg, #A89B8E 0%, #85786C 50%, #6E6359 100%)",
-          clipPath: "polygon(6% 0%, 50% 38%, 94% 0%, 100% 100%, 0% 100%)",
-          boxShadow: "inset 0 5px 14px rgba(0,0,0,0.38)",
-        }}
-      />
-
-      <div
-        className="envelope-flap-flip absolute inset-x-0 top-0 z-[2]"
-        style={{ height: `${ENVELOPE_FLAP_RATIO * 100}%` }}
-      >
+      {/* Closed state — fades out when open */}
+      {(layer === "full" || layer === "back") && (
         <div
-          className={`relative h-full w-full ${open ? "envelope-flap-open" : ""}`}
-          style={{ transformOrigin: "50% 100%" }}
+          className={`coastal-envelope__closed ${open ? "coastal-envelope__closed--hide" : ""}`}
         >
           <Image
-            src="/images/envelope-ai-flap.png"
+            src={CLOSED_SRC}
             alt=""
             fill
             unoptimized
+            priority
             draggable={false}
-            className="object-contain object-top"
-            sizes="280px"
+            className="object-contain object-bottom"
+            sizes="300px"
           />
         </div>
-      </div>
+      )}
+
+      {/* Open back (full open photo) — behind drawing photos */}
+      {(layer === "full" || layer === "back") && (
+        <div
+          className={`coastal-envelope__open ${open ? "coastal-envelope__open--show" : ""}`}
+        >
+          <Image
+            src={OPEN_SRC}
+            alt=""
+            fill
+            unoptimized
+            priority
+            draggable={false}
+            className="object-contain object-bottom"
+            sizes="300px"
+          />
+        </div>
+      )}
+
+      {/* Open pocket overlay — clips to front flaps so photos emerge through the V */}
+      {(layer === "full" || layer === "pocket") && (
+        <div
+          className={`coastal-envelope__pocket ${open ? "coastal-envelope__pocket--show" : ""}`}
+        >
+          <Image
+            src={OPEN_SRC}
+            alt=""
+            fill
+            unoptimized
+            priority
+            draggable={false}
+            className="object-contain object-bottom"
+            sizes="300px"
+          />
+        </div>
+      )}
     </div>
   );
 }

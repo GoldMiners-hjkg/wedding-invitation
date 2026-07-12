@@ -225,78 +225,110 @@ body {
   animation: fadeIn 0.3s ease-out;
 }
 
+@keyframes continue-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(4px);
+  }
+  55% {
+    opacity: 0.7;
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.animate-continue-fade-in {
+  animation: continue-fade-in 1.15s cubic-bezier(0.22, 0.82, 0.2, 1) both;
+}
+
 @keyframes envelope-pop-in {
   0% {
     opacity: 0;
-    transform: translateX(-50%) translateY(28px) scale(0.48);
-  }
-  62% {
-    transform: translateX(-50%) translateY(-6px) scale(1.05);
+    transform: translateY(18px) scale(0.92);
   }
   100% {
     opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
+    transform: translateY(0) scale(1);
   }
-}
-
-@keyframes envelope-flap-open {
-  0% {
-    transform: rotateX(0deg);
-  }
-  55% {
-    transform: rotateX(-95deg);
-  }
-  100% {
-    transform: rotateX(-168deg);
-  }
-}
-
-@keyframes envelope-inner-reveal {
-  0% {
-    opacity: 0.55;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.envelope-scene {
-  perspective: 820px;
-  perspective-origin: 50% 36%;
-}
-
-.envelope-flap-flip {
-  transform-style: preserve-3d;
-}
-
-.envelope-flap-open {
-  animation: envelope-flap-open 0.85s cubic-bezier(0.34, 1.02, 0.48, 1) forwards;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-}
-
-.envelope-inner-reveal {
-  animation: envelope-inner-reveal 0.85s ease-out forwards;
 }
 
 @keyframes envelope-vanish {
   0% {
     opacity: 1;
-    transform: translateX(-50%) scale(1);
+    filter: blur(0);
+    transform: scale(1);
   }
   100% {
     opacity: 0;
-    transform: translateX(-50%) scale(0.78);
+    filter: blur(5px);
+    transform: scale(0.97);
   }
 }
 
 .envelope-pop-in {
-  animation: envelope-pop-in 0.85s cubic-bezier(0.34, 1.28, 0.64, 1) forwards;
+  animation: envelope-pop-in 0.78s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   opacity: 0;
 }
 
 .envelope-vanish {
-  animation: envelope-vanish 0.65s ease-in forwards;
+  animation: envelope-vanish 0.98s cubic-bezier(0.22, 0.82, 0.2, 1) forwards;
+}
+
+/* Coastal pearl photo envelope */
+.coastal-envelope {
+  filter: drop-shadow(0 12px 24px rgba(68, 52, 60, 0.16));
+}
+
+.coastal-envelope__closed,
+.coastal-envelope__open,
+.coastal-envelope__pocket {
+  position: absolute;
+  inset: 0;
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 0.82, 0.2, 1),
+    transform 0.7s cubic-bezier(0.22, 0.82, 0.2, 1);
+}
+
+.coastal-envelope__closed {
+  z-index: 3;
+  opacity: 1;
+  /* Closed asset is shorter — keep it seated on the open frame's bottom */
+  transform: scale(1);
+}
+
+.coastal-envelope__closed--hide {
+  opacity: 0;
+  transform: scale(0.98);
+  pointer-events: none;
+}
+
+.coastal-envelope__open {
+  z-index: 1;
+  opacity: 0;
+  transform: scale(0.98);
+}
+
+.coastal-envelope__open--show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.coastal-envelope__pocket {
+  z-index: 4;
+  opacity: 0;
+  /* Front flaps only — photos draw out through the open V */
+  clip-path: polygon(0% 42%, 50% 68%, 100% 42%, 100% 100%, 0% 100%);
+  transform: scale(0.98);
+}
+
+.coastal-envelope__pocket--show {
+  opacity: 1;
+  transform: scale(1);
 }
 
 @keyframes palm-sway {
@@ -368,12 +400,26 @@ body {
     opacity: 1;
   }
 
-  .envelope-pop-in,
-  .envelope-flap-open,
-  .envelope-vanish {
+  .animate-continue-fade-in {
     animation: none;
     opacity: 1;
-    transform: translateX(-50%);
+    transform: none;
+    filter: none;
+  }
+
+  .envelope-pop-in,
+  .envelope-vanish,
+  .coastal-envelope__closed,
+  .coastal-envelope__open,
+  .coastal-envelope__pocket {
+    animation: none;
+    transition: none;
+  }
+
+  .envelope-pop-in,
+  .envelope-vanish {
+    opacity: 1;
+    transform: none;
   }
 
   .animate-palm-sway,

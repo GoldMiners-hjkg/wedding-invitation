@@ -8,7 +8,10 @@ import {
   useRef,
   useState,
 } from "react";
-import { Envelope, ENVELOPE_ASPECT, ENVELOPE_FLAP_RATIO } from "@/components/Envelope";
+import {
+  Envelope,
+  ENVELOPE_ASPECT,
+} from "@/components/Envelope";
 
 const SCATTER = [
   { x: 4, y: 6, rotate: -11, scale: 0.92, z: 2 },
@@ -19,32 +22,44 @@ const SCATTER = [
   { x: 42, y: 54, rotate: -9, scale: 0.9, z: 7 },
 ] as const;
 
-const ENVELOPE = { left: 50, top: 54, width: 52 } as const;
+/** Envelope near the continue button (lower on the table) */
+const ENVELOPE = { left: 50, top: 52, width: 68 } as const;
 
 function getEnvelopeMouth() {
   const heightPct = ENVELOPE.width * (1 / ENVELOPE_ASPECT);
-  return { x: ENVELOPE.left, y: ENVELOPE.top + heightPct * ENVELOPE_FLAP_RATIO * 0.92 };
+  return {
+    x: ENVELOPE.left,
+    // Mouth of open coastal-pearl photo — just below the open flap / pocket V
+    y: ENVELOPE.top + heightPct * 0.55,
+  };
 }
 
-const ENVELOPE_OPEN_DELAY_MS = 720;
-const ENVELOPE_FLAP_MS = 850;
-const PHOTO_START_DELAY_MS = ENVELOPE_OPEN_DELAY_MS + ENVELOPE_FLAP_MS + 150;
-const BURST_DURATION_MS = 820;
-const BURST_STAGGER_MS = 130;
-const ENVELOPE_VANISH_MS = 650;
-const BURST_EASING = "cubic-bezier(0.33, 1, 0.28, 1)";
+const ENVELOPE_OPEN_DELAY_MS = 1200;
+const ENVELOPE_OPEN_MS = 850;
+const PHOTO_START_DELAY_MS = ENVELOPE_OPEN_DELAY_MS + ENVELOPE_OPEN_MS + 280;
+const DRAW_DURATION_MS = 1850;
+const DRAW_STAGGER_MS = 260;
+const ENVELOPE_VANISH_MS = 980;
+const DRAW_EASING = "cubic-bezier(0.33, 0.72, 0.2, 1)";
 
 const SCROLL_LOCK_PX = 10;
 const TAP_MAX_MOVE_PX = 12;
 
-interface BurstOffset {
-  dx: number;
-  dy: number;
+interface DrawPath {
+  startX: number;
+  startY: number;
+  holdX: number;
+  holdY: number;
+  riseX: number;
+  riseY: number;
+  midX: number;
+  midY: number;
 }
 
 interface ScatteredPhotoTableProps {
   photos: readonly string[];
   onOpen: (index: number) => void;
+  onBurstComplete?: () => void;
   className?: string;
 }
 
@@ -55,27 +70,42 @@ type GestureState = {
   scrolling: boolean;
 };
 
-function computeBurstOffset(
+function computeDrawPath(
   width: number,
   height: number,
   layout: (typeof SCATTER)[number],
-): BurstOffset {
+): DrawPath {
   const mouth = getEnvelopeMouth();
   const mouthX = (mouth.x / 100) * width;
   const mouthY = (mouth.y / 100) * height;
   const endX = (layout.x / 100) * width;
   const endY = (layout.y / 100) * height;
   const cardW = layout.scale * 0.42 * width;
+  const cardH = cardW * (4 / 3);
 
-  return {
-    dx: mouthX - endX - cardW * 0.5,
-    dy: mouthY - endY - cardW * 0.55,
-  };
+  // Start tucked inside the pocket (below the mouth opening)
+  const startX = mouthX - cardW * 0.5;
+  const startY = mouthY - cardH * 0.12;
+
+  // Half-drawn: mostly still in the envelope, top peeking through the V
+  const holdX = mouthX - cardW * 0.5;
+  const holdY = mouthY - cardH * 0.48;
+
+  // Rise clear of the mouth before arcing out
+  const riseX = mouthX - cardW * 0.5;
+  const riseY = mouthY - cardH * 1.05;
+
+  // Soft arc toward final scatter slot
+  const midX = startX + (endX - startX) * 0.55;
+  const midY = riseY + (endY - riseY) * 0.35 - 12;
+
+  return { startX, startY, holdX, holdY, riseX, riseY, midX, midY };
 }
 
 export function ScatteredPhotoTable({
   photos,
   onOpen,
+  onBurstComplete,
   className,
 }: ScatteredPhotoTableProps) {
   const tableRef = useRef<HTMLDivElement>(null);
@@ -102,46 +132,100 @@ export function ScatteredPhotoTable({
     [burstComplete],
   );
 
-  const runBurst = useCallback(
+  const runDrawOut = useCallback(
     (index: number) => {
       if (animatedRef.current.has(index) || reduceMotion) return;
 
       const card = cardRefs.current[index];
+      const wrapper = card?.parentElement as HTMLElement | null;
       const { width, height } = tableSizeRef.current;
-      if (!card || width <= 0) return;
+      if (!card || !wrapper || width <= 0) return;
 
       animatedRef.current.add(index);
       const layout = SCATTER[index % SCATTER.length];
-      const { dx, dy } = computeBurstOffset(width, height, layout);
+      const path = computeDrawPath(width, height, layout);
+
+      const endLeft = (layout.x / 100) * width;
+      const endTop = (layout.y / 100) * height;
+
+      // Animate from absolute mouth coords via translate relative to final slot
+      const dx0 = path.startX - endLeft;
+      const dy0 = path.startY - endTop;
+      const dxHold = path.holdX - endLeft;
+      const dyHold = path.holdY - endTop;
+      const dxRise = path.riseX - endLeft;
+      const dyRise = path.riseY - endTop;
+      const dxMid = path.midX - endLeft;
+      const dyMid = path.midY - endTop;
 
       card.style.visibility = "visible";
       card.style.opacity = "0";
+      // Stay behind the pocket while emerging through the V opening
+      wrapper.style.zIndex = String(6 + index);
 
       const animation = card.animate(
         [
           {
-            transform: `translate3d(${dx}px, ${dy}px, 0) rotate(0deg) scale(0.1)`,
+            // Tucked inside
+            transform: `translate3d(${dx0}px, ${dy0}px, 0) rotate(0deg) scale(0.34)`,
             opacity: 0,
+            offset: 0,
+          },
+          {
+            // Draw out halfway — peeking from the V
+            transform: `translate3d(${dxHold}px, ${dyHold}px, 0) rotate(${layout.rotate * 0.08}deg) scale(0.52)`,
+            opacity: 1,
+            offset: 0.22,
+          },
+          {
+            // Hold on the envelope before popping free
+            transform: `translate3d(${dxHold}px, ${dyHold}px, 0) rotate(${layout.rotate * 0.1}deg) scale(0.54)`,
+            opacity: 1,
+            offset: 0.42,
+          },
+          {
+            // Pop clear of the mouth
+            transform: `translate3d(${dxRise}px, ${dyRise}px, 0) rotate(${layout.rotate * 0.22}deg) scale(0.78)`,
+            opacity: 1,
+            offset: 0.58,
+          },
+          {
+            // Soft arc into place
+            transform: `translate3d(${dxMid}px, ${dyMid}px, 0) rotate(${layout.rotate * 0.72}deg) scale(0.96)`,
+            opacity: 1,
+            offset: 0.8,
           },
           {
             transform: `translate3d(0px, 0px, 0) rotate(${layout.rotate}deg) scale(1)`,
             opacity: 1,
+            offset: 1,
           },
         ],
         {
-          duration: BURST_DURATION_MS,
-          easing: BURST_EASING,
+          duration: DRAW_DURATION_MS,
+          easing: DRAW_EASING,
           fill: "forwards",
         },
       );
 
+      // Once past the hold, lift above the front pocket for the pop-out
+      window.setTimeout(() => {
+        if (wrapper.isConnected) wrapper.style.zIndex = String(16 + index);
+      }, DRAW_DURATION_MS * 0.48);
+
       animation.onfinish = () => {
         card.style.transform = `rotate(${layout.rotate}deg) scale(1)`;
         card.style.opacity = "1";
+        wrapper.style.zIndex = String(layout.z);
       };
     },
     [reduceMotion],
   );
+
+  useEffect(() => {
+    if (!burstComplete) return;
+    onBurstComplete?.();
+  }, [burstComplete, onBurstComplete]);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -170,40 +254,44 @@ export function ScatteredPhotoTable({
 
   useEffect(() => {
     if (reduceMotion) {
-      setRevealedCount(photos.length);
-      setBurstComplete(true);
-      setEnvelopeHidden(true);
-      photos.forEach((_, i) => {
-        const card = cardRefs.current[i];
-        if (!card) return;
-        const layout = SCATTER[i % SCATTER.length];
-        card.style.visibility = "visible";
-        card.style.opacity = "1";
-        card.style.transform = `rotate(${layout.rotate}deg) scale(1)`;
+      const frame = window.requestAnimationFrame(() => {
+        setRevealedCount(photos.length);
+        setBurstComplete(true);
+        setEnvelopeHidden(true);
+        photos.forEach((_, i) => {
+          const card = cardRefs.current[i];
+          if (!card) return;
+          const layout = SCATTER[i % SCATTER.length];
+          card.style.visibility = "visible";
+          card.style.opacity = "1";
+          card.style.transform = `rotate(${layout.rotate}deg) scale(1)`;
+        });
       });
-      return;
+      return () => window.cancelAnimationFrame(frame);
     }
     if (!tableReady) return;
 
     const lastPhotoStart =
-      PHOTO_START_DELAY_MS + (photos.length - 1) * BURST_STAGGER_MS;
-    const lastPhotoEnd = lastPhotoStart + BURST_DURATION_MS;
+      PHOTO_START_DELAY_MS + (photos.length - 1) * DRAW_STAGGER_MS;
+    const lastPhotoEnd = lastPhotoStart + DRAW_DURATION_MS;
+    // Fade as soon as the last photo has cleared the mouth
+    const envelopeVanishAt = lastPhotoStart + DRAW_DURATION_MS * 0.58;
 
     const timers = [
-      window.setTimeout(() => setEnvelopeEnter(true), 80),
+      window.setTimeout(() => setEnvelopeEnter(true), 60),
       window.setTimeout(() => setEnvelopeOpen(true), ENVELOPE_OPEN_DELAY_MS),
       ...photos.map((_, i) =>
         window.setTimeout(
           () => setRevealedCount((count) => Math.max(count, i + 1)),
-          PHOTO_START_DELAY_MS + i * BURST_STAGGER_MS,
+          PHOTO_START_DELAY_MS + i * DRAW_STAGGER_MS,
         ),
       ),
-      window.setTimeout(() => setEnvelopeVanish(true), lastPhotoEnd + 80),
+      window.setTimeout(() => setEnvelopeVanish(true), envelopeVanishAt),
       window.setTimeout(
         () => setEnvelopeHidden(true),
-        lastPhotoEnd + 80 + ENVELOPE_VANISH_MS,
+        envelopeVanishAt + ENVELOPE_VANISH_MS,
       ),
-      window.setTimeout(() => setBurstComplete(true), lastPhotoEnd + 40),
+      window.setTimeout(() => setBurstComplete(true), lastPhotoEnd + 60),
     ];
 
     return () => timers.forEach(window.clearTimeout);
@@ -211,8 +299,8 @@ export function ScatteredPhotoTable({
 
   useEffect(() => {
     if (revealedCount <= 0 || reduceMotion) return;
-    runBurst(revealedCount - 1);
-  }, [revealedCount, reduceMotion, runBurst]);
+    runDrawOut(revealedCount - 1);
+  }, [revealedCount, reduceMotion, runDrawOut]);
 
   const indexFromPoint = useCallback((clientX: number, clientY: number) => {
     const el = document.elementFromPoint(clientX, clientY);
@@ -299,20 +387,43 @@ export function ScatteredPhotoTable({
       />
 
       {!envelopeHidden && !reduceMotion && (
-        <div
-          className={`pointer-events-none absolute left-1/2 z-[8] w-[52%] ${
-            envelopeEnter ? "envelope-pop-in" : "opacity-0"
-          } ${envelopeVanish ? "envelope-vanish" : ""}`}
-          style={{ top: `${ENVELOPE.top - 8}%` }}
-        >
-          <Envelope open={envelopeOpen} className="h-auto w-full drop-shadow-lg" />
-        </div>
+        <>
+          {/* Closed + open back photo — behind drawing photos */}
+          <div
+            className={`pointer-events-none absolute inset-x-0 z-[5] mx-auto w-[68%] max-w-[280px] ${
+              envelopeEnter ? "envelope-pop-in" : "opacity-0"
+            } ${envelopeVanish ? "envelope-vanish" : ""}`}
+            style={{ top: `${ENVELOPE.top}%` }}
+          >
+            <Envelope
+              open={envelopeOpen}
+              layer="back"
+              className="h-auto w-full"
+            />
+          </div>
+
+          {/* Pocket flaps from open photo — above photos so they draw through the V */}
+          <div
+            className={`pointer-events-none absolute inset-x-0 z-[14] mx-auto w-[68%] max-w-[280px] ${
+              envelopeEnter ? "envelope-pop-in" : "opacity-0"
+            } ${envelopeVanish ? "envelope-vanish" : ""}`}
+            style={{ top: `${ENVELOPE.top}%` }}
+          >
+            <Envelope
+              open={envelopeOpen}
+              layer="pocket"
+              className="h-auto w-full"
+            />
+          </div>
+        </>
       )}
 
       {photos.map((src, i) => {
         const layout = SCATTER[i % SCATTER.length];
         const isLifted = liftedIndex === i;
         const isVisible = burstComplete || i < revealedCount;
+        // Between back (5) and front (14) while drawing out; above after clearing
+        const drawingZ = 6 + i;
 
         return (
           <div
@@ -323,7 +434,11 @@ export function ScatteredPhotoTable({
               left: `${layout.x}%`,
               top: `${layout.y}%`,
               width: `${layout.scale * 42}%`,
-              zIndex: isVisible && !burstComplete ? 10 + i : layout.z + (isLifted ? 20 : 0),
+              zIndex: burstComplete
+                ? layout.z + (isLifted ? 20 : 0)
+                : isVisible
+                  ? drawingZ
+                  : 0,
             }}
             onPointerEnter={() => {
               if (!pressingRef.current) lift(i);

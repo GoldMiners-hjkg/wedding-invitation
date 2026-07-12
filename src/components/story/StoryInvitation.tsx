@@ -21,6 +21,7 @@ import {
   INVITE_PHOTOS,
 } from "@/lib/invite-template";
 import { useLanguage } from "@/lib/i18n/context";
+import { DRESS_CODE_COLORS } from "@/lib/wedding";
 import {
   configureInlineVideo,
   isWeChatBrowser,
@@ -609,10 +610,10 @@ export function StoryInvitation() {
           className="invite-en invite-ink-black"
         />
 
-        {/* Calendar block */}
+        {/* Calendar — lower half of photo, fully visible */}
         <Decor src={d.calendarFrame} top={4491} left={24} w={328} h={524} />
         <Photo src={p.calendarPhoto} top={4506} left={40} w={296} h={419} />
-        <Box top={4631} left={25} w={325} h={325} className="invite-calendar-wrap">
+        <Box top={4748} left={42} w={290} className="invite-calendar-wrap">
           <StoryCalendar />
         </Box>
         <Txt
@@ -633,47 +634,37 @@ export function StoryInvitation() {
           style={{ lineHeight: 1.8, letterSpacing: "0.12em" }}
         />
 
-        <Photo src={p.finale} top={5182} left={-4} w={383} h={647} />
         <Txt
-          top={5187}
-          left={0}
-          w={375}
-          text={i.sweetEn}
-          className="invite-zh invite-ink-white"
-          style={{ letterSpacing: "0.25em" }}
-        />
-
-        <Txt
-          top={5793}
+          top={5140}
           left={0}
           w={375}
           text={i.pride}
           className="invite-zh invite-ink-black"
           style={{ lineHeight: 1.8, letterSpacing: "0.12em" }}
         />
-        <Dot top={5931} left={182} />
-        <Decor src={d.venueBanner} top={5973} left={98} w={180} h={44} />
+        <Dot top={5270} left={182} />
+        <Decor src={d.venueBanner} top={5310} left={98} w={180} h={44} />
 
-        <Box top={6071} left={27} w={321} h={154} className="invite-map">
-          <a
-            href={m.mapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="invite-map__link"
-          >
-            <Image
-              src={p.map}
-              alt={venueName}
-              fill
-              unoptimized
-              className="object-cover"
-              sizes="320px"
-            />
-            <span className="invite-map__label">{i.openNav}</span>
-          </a>
-        </Box>
+        <Photo
+          src={p.hotelA}
+          alt={venueName}
+          top={5370}
+          left={14}
+          w={168}
+          h={175}
+          className="invite-hotel-shot invite-hotel-shot--a"
+        />
+        <Photo
+          src={p.hotelB}
+          alt={venueName}
+          top={5420}
+          left={193}
+          w={168}
+          h={175}
+          className="invite-hotel-shot invite-hotel-shot--b"
+        />
         <Txt
-          top={6245}
+          top={5610}
           left={0}
           w={375}
           text={`${venueName}\n${venueDetail}`}
@@ -681,6 +672,39 @@ export function StoryInvitation() {
           style={{ lineHeight: 1.8, letterSpacing: "0.12em" }}
         />
       </div>
+
+      <section className="invite-dress" aria-label={t.dressCode.title}>
+        <div className="invite-dress__banner">
+          <Image
+            src={d.dressCodeBanner}
+            alt="DRESS CODE"
+            width={684}
+            height={204}
+            unoptimized
+            className="invite-dress__banner-img"
+            draggable={false}
+          />
+        </div>
+        <div className="invite-dress__swatches">
+          {DRESS_CODE_COLORS.map((color, index) => (
+            <div key={color.hex} className="invite-dress__swatch">
+              <span
+                className="invite-dress__chip"
+                style={{ backgroundColor: color.hex }}
+                title={t.dressCode.colors[index]}
+              />
+              <span className="invite-dress__chip-label">
+                {t.dressCode.colors[index]}
+              </span>
+            </div>
+          ))}
+        </div>
+        <ul className="invite-dress__list">
+          {t.dressCode.guidance.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </section>
 
       <div id="rsvp" className="invite-rsvp">
         <RSVPForm />

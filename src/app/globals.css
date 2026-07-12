@@ -537,6 +537,9 @@ body {
 
 .invite-ink-white {
   color: #fff;
+  text-shadow:
+    0 0 2px rgba(0, 0, 0, 0.7),
+    0 1px 4px rgba(0, 0, 0, 0.55);
 }
 
 .invite-hero-name {
@@ -584,90 +587,187 @@ body {
 
 .invite-calendar-wrap {
   z-index: 5;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 6%;
+  display: block;
+  padding: 0.15rem 0.1rem 0;
+  background: transparent !important;
+  pointer-events: none;
+  overflow: visible;
 }
 
 .invite-calendar {
-  width: 86%;
-  color: #111;
+  width: 100%;
+  color: #4a453e;
+  padding: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
 }
 
 .invite-calendar__head {
   position: relative;
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.2rem;
+  min-height: 1.2em;
   text-align: left;
 }
 
-.invite-calendar__md {
-  font-family: "MAXWELL Light", "Times New Roman", serif;
-  font-size: clamp(18px, 5.5vw, 24px);
-  letter-spacing: 0.08em;
+.invite-calendar__md,
+.invite-calendar__year {
+  display: inline-block;
+  font-family: "GenRyuMin TW", "Source Han Serif TC", serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #4a453e !important;
+  padding: 0.08rem 0.32rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55) !important;
+  line-height: 1.2;
+  text-shadow: none;
 }
 
 .invite-calendar__year {
   position: absolute;
   right: 0;
-  top: -0.15rem;
-  font-family: "MAXWELL Light", "Times New Roman", serif;
-  font-size: clamp(28px, 10vw, 42px);
-  line-height: 1;
-  opacity: 0.12;
-  letter-spacing: 0.04em;
+  top: 0;
+  opacity: 1;
 }
 
 .invite-calendar__week,
 .invite-calendar__grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0.25rem 0;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.18rem 0.1rem;
   text-align: center;
-  font-size: clamp(10px, 2.8vw, 12px);
+  font-size: 9px;
   font-family: "GenRyuMin TW", serif;
+  font-weight: 500;
+  line-height: 1;
 }
 
 .invite-calendar__week {
-  color: rgba(17, 17, 17, 0.55);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.12rem;
+}
+
+.invite-calendar__week span,
+.invite-calendar__day:not(:empty):not(.invite-calendar__day--active) {
+  display: grid;
+  place-items: center;
+  width: 1.7em;
+  height: 1.7em;
+  margin: 0 auto;
+  color: #4a453e !important;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55) !important;
+  text-shadow: none;
+  overflow: visible;
 }
 
 .invite-calendar__day {
-  aspect-ratio: 1;
   display: grid;
   place-items: center;
-}
-
-.invite-calendar__day--active {
-  border: 1px solid #111;
+  width: 1.7em;
+  height: 1.7em;
+  margin: 0 auto;
+  color: #4a453e !important;
   border-radius: 999px;
+  background: transparent;
+  overflow: visible;
 }
 
-.invite-map {
+.invite-calendar__day.invite-calendar__day--active {
+  background: #f2a8b8 !important;
+  color: #fff !important;
+  font-weight: 600;
+  box-shadow: 0 0 0 1.5px rgba(242, 168, 184, 0.65);
+  border: none;
+}
+
+.invite-hotel-shot {
   z-index: 5;
   overflow: hidden;
+  border: 1px solid rgba(186, 165, 138, 0.35);
 }
 
-.invite-map__link {
+.invite-dress {
   position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
+  z-index: 2;
+  padding: 2rem 1.35rem 0.5rem;
+  background: #fff;
+  color: #111;
 }
 
-.invite-map__label {
+.invite-dress__banner {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.invite-dress__banner-img {
+  width: min(72%, 14rem);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.invite-dress__swatches {
+  display: flex;
+  justify-content: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.invite-dress__swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.invite-dress__chip {
+  display: block;
+  width: 2.1rem;
+  height: 2.1rem;
+  border: 1px solid rgba(186, 165, 138, 0.45);
+}
+
+.invite-dress__chip-label {
+  font-family: "GenRyuMin TW", "Source Han Serif TC", serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: #111;
+  text-align: center;
+  max-width: 3.4rem;
+  line-height: 1.25;
+}
+
+.invite-dress__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.invite-dress__list li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-family: "GenRyuMin TW", "Source Han Serif TC", serif;
+  font-size: clamp(11px, 3.2vw, 13px);
+  line-height: 1.75;
+  letter-spacing: 0.06em;
+  color: #111;
+}
+
+.invite-dress__list li::before {
+  content: "";
   position: absolute;
-  left: 50%;
-  bottom: 0.65rem;
-  transform: translateX(-50%);
-  padding: 0.3rem 0.75rem;
-  background: rgba(0, 0, 0, 0.55);
-  color: #fff;
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  font-family: "GenRyuMin TW", serif;
+  left: 0;
+  top: 0.7em;
+  width: 0.55rem;
+  height: 1px;
+  background: #baa58a;
 }
 
 .invite-rsvp {
@@ -790,6 +890,11 @@ body {
 
 .invite-rsvp .bg-sky-light {
   background-color: #f4f0ea !important;
+}
+
+/* Hotel confirm overlay — never use vintage charcoal (wine-tinted) */
+.invite-rsvp .fixed.inset-0 > button[aria-label="Close"] {
+  background-color: rgba(0, 0, 0, 0.45) !important;
 }
 
 .invite-rsvp .text-cream {

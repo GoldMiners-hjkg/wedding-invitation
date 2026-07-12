@@ -17,10 +17,13 @@ Text/copy: edit `src/lib/invite-template.ts`.
 | `cutout.png` | Cutout portrait (PNG with transparency) |
 | `wide-1.jpg` / `wide-2.jpg` | Landscape pair |
 | `calendar-photo.jpg` | Behind calendar frame |
-| `finale.jpg` | Large closing photo |
-| `map.jpg` | Map thumbnail |
+| `map.jpg` | Map thumbnail (unused; hotel photos used instead) |
 
 Uncropped sources: `photos/originals/`
 
 ## Decor / fonts / audio
 `decor/` ornaments · `fonts/MAXWELL-Light.ttf` · `audio/bgm.mp3`
+
+| File | Role |
+|------|------|
+| `decor/dress-code-banner.png` | AI title banner matching ADDRESS / WEDDING style |

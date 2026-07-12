@@ -281,6 +281,21 @@ export function RsvpEditPanel({
                     ))}
                   </select>
                 </div>
+                <p className="font-body text-xs text-charcoal/55">
+                  Nights to book:{" "}
+                  <span className="font-medium text-charcoal">
+                    {form.hotel_check_in_dates.length || 0}
+                  </span>
+                  {form.hotel_check_in_dates.length > 0
+                    ? ` (${form.hotel_check_in_dates
+                        .map(
+                          (d) =>
+                            HOTEL_CHECK_IN_DATE_OPTIONS.find((o) => o.value === d)
+                              ?.label ?? d,
+                        )
+                        .join(", ")})`
+                    : ""}
+                </p>
               </div>
             )}
 

@@ -462,7 +462,7 @@ export function RSVPForm() {
           <button
             type="button"
             aria-label="Close"
-            className="absolute inset-0 bg-charcoal/45 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/45 backdrop-blur-sm"
             onClick={() => !submitting && setShowHotelConfirm(false)}
           />
           <div className="relative z-10 w-full max-w-md rounded-sm border border-wine/15 bg-cream p-6 shadow-2xl sm:p-8">

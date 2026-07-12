@@ -29,6 +29,19 @@ create index if not exists rsvp_responses_created_at_idx
   on rsvp_responses (created_at desc);
 `;
 
+/** Backfill nights from stored check-in date CSV for older rows. */
+const BACKFILL_NIGHTS_SQL = `
+update rsvp_responses
+set hotel_num_nights = case
+  when hotel_needed = 0 or hotel_check_in_time is null or trim(hotel_check_in_time) = '' then null
+  else length(hotel_check_in_time) - length(replace(hotel_check_in_time, ',', '')) + 1
+end
+where hotel_needed = 1
+  and hotel_num_nights is null
+  and hotel_check_in_time is not null
+  and trim(hotel_check_in_time) != '';
+`;
+
 let db: DatabaseSync | null = null;
 
 function getDb() {
@@ -38,6 +51,7 @@ function getDb() {
     mkdirSync(join(process.cwd(), "data"), { recursive: true });
     db = new DatabaseSync(path);
     db.exec(INIT_SQL);
+    db.exec(BACKFILL_NIGHTS_SQL);
   }
   return db;
 }
@@ -51,6 +65,7 @@ function rowToResponse(row: Record<string, unknown>): RSVPResponse {
     hotel_needed: Boolean(row.hotel_needed),
     hotel_check_in_time: row.hotel_check_in_time as string | null,
     hotel_num_guests: row.hotel_num_guests as number | null,
+    hotel_num_nights: row.hotel_num_nights as number | null,
     arrival_time: row.arrival_time as string | null,
     flight_number: row.flight_number as string | null,
     flight_arrival_time: row.flight_arrival_time as string | null,
@@ -72,12 +87,12 @@ export function createSqliteStorage(): RsvpStorage {
         .prepare(
           `insert into rsvp_responses (
             id, full_name, attending, num_guests, hotel_needed,
-            hotel_check_in_time, hotel_num_guests,
+            hotel_check_in_time, hotel_num_guests, hotel_num_nights,
             arrival_time, flight_number, flight_arrival_time, arriving_airport,
             dietary_requirements, note_to_couple
           ) values (
             ?, ?, ?, ?, ?,
-            ?, ?,
+            ?, ?, ?,
             ?, ?, ?, ?,
             ?, ?
           )`,
@@ -90,6 +105,7 @@ export function createSqliteStorage(): RsvpStorage {
           payload.hotel_needed ? 1 : 0,
           payload.hotel_check_in_time,
           payload.hotel_num_guests,
+          payload.hotel_num_nights,
           payload.arrival_time,
           payload.flight_number,
           payload.flight_arrival_time,
@@ -117,7 +133,7 @@ export function createSqliteStorage(): RsvpStorage {
           `update rsvp_responses set
             full_name = ?, attending = ?, num_guests = ?, hotel_needed = ?,
             hotel_check_in_time = ?,
-            hotel_num_guests = ?,
+            hotel_num_guests = ?, hotel_num_nights = ?,
             arrival_time = ?, flight_number = ?, flight_arrival_time = ?,
             arriving_airport = ?, dietary_requirements = ?, note_to_couple = ?
           where id = ?`,
@@ -129,6 +145,7 @@ export function createSqliteStorage(): RsvpStorage {
           payload.hotel_needed ? 1 : 0,
           payload.hotel_check_in_time,
           payload.hotel_num_guests,
+          payload.hotel_num_nights,
           payload.arrival_time,
           payload.flight_number,
           payload.flight_arrival_time,

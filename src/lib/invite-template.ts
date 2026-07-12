@@ -7,13 +7,13 @@
  */
 
 import { COUPLE } from "@/lib/couple";
-import { HOTEL, WEDDING } from "@/lib/wedding";
+import { HOTEL, MEDIA, WEDDING } from "@/lib/wedding";
 
 const P = "/images/invite/photos";
 const D = "/images/invite/decor";
 
 /** Design canvas size from the original H5 (px) */
-export const INVITE_DESIGN = { width: 375, height: 6350 } as const;
+export const INVITE_DESIGN = { width: 375, height: 5700 } as const;
 
 /** Replace these paths with your own files */
 export const INVITE_PHOTOS = {
@@ -30,8 +30,9 @@ export const INVITE_PHOTOS = {
   wide1: `${P}/wide-1.jpg`,
   wide2: `${P}/wide-2.jpg`,
   calendarPhoto: `${P}/calendar-photo.jpg`,
-  finale: `${P}/finale.jpg`,
-  map: `${P}/map.jpg`,
+  /** Hotel venue photos (replaces map) */
+  hotelA: MEDIA.hotelPhotos[0],
+  hotelB: MEDIA.hotelPhotos[1],
 } as const;
 
 /** Hero video — photo falls back if this fails to load/play */
@@ -49,6 +50,7 @@ export const INVITE_DECOR = {
   quoteBannerC: `${D}/quote-banner-c.png`,
   calendarFrame: `${D}/calendar-frame.png`,
   venueBanner: `${D}/venue-banner.png`,
+  dressCodeBanner: `${D}/dress-code-banner.png`,
   closingBanner: `${D}/closing-banner.png`,
 } as const;
 

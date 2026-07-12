@@ -3,6 +3,8 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { RsvpEditPanel } from "@/components/admin/RsvpEditPanel";
 import { downloadRsvpCsv } from "@/lib/admin/rsvp-csv";
+import { formatHotelBookingSummary } from "@/lib/rsvp/map-response";
+import { hotelNightCount } from "@/lib/wedding";
 import type { RSVPResponse } from "@/lib/types";
 
 function formatDate(iso: string) {
@@ -205,8 +207,8 @@ export default function AdminPage() {
           </span>
         </td>
         <td className="px-4 py-3 text-ivory/70">{response.num_guests}</td>
-        <td className="px-4 py-3 text-ivory/70">
-          {response.hotel_needed ? "Yes" : "—"}
+        <td className="px-4 py-3 text-ivory/70 whitespace-nowrap">
+          {formatHotelBookingSummary(response)}
         </td>
         <td className="px-4 py-3 text-ivory/70">
           {response.arrival_time || "—"}
@@ -234,6 +236,12 @@ export default function AdminPage() {
   const guestCount = responses
     .filter((r) => r.attending)
     .reduce((sum, r) => sum + r.num_guests, 0);
+  const hotelBookings = responses.filter((r) => r.hotel_needed);
+  const hotelNightTotal = hotelBookings.reduce(
+    (sum, r) =>
+      sum + (r.hotel_num_nights ?? hotelNightCount(r.hotel_check_in_dates)),
+    0,
+  );
 
   if (!authenticated) {
     return (
@@ -278,6 +286,9 @@ export default function AdminPage() {
             <p className="mt-1 font-body text-sm text-ivory/50">
               {responses.length} responses · {nameGroups.length} guests ·{" "}
               {attendingCount} attending · {guestCount} total guests
+              {hotelBookings.length > 0
+                ? ` · ${hotelBookings.length} hotel · ${hotelNightTotal} nights`
+                : ""}
             </p>
           </div>
           <div className="flex gap-3">
@@ -364,7 +375,7 @@ export default function AdminPage() {
                     Guests
                   </th>
                   <th className="px-4 py-3 text-xs tracking-wide text-ivory/50 uppercase">
-                    Hotel
+                    Hotel (nights · dates · pax)
                   </th>
                   <th className="px-4 py-3 text-xs tracking-wide text-ivory/50 uppercase">
                     Arrival
@@ -469,8 +480,8 @@ export default function AdminPage() {
                             <td className="px-4 py-3 text-ivory/70">
                               {latest.num_guests}
                             </td>
-                            <td className="px-4 py-3 text-ivory/70">
-                              {latest.hotel_needed ? "Yes" : "—"}
+                            <td className="px-4 py-3 text-ivory/70 whitespace-nowrap">
+                              {formatHotelBookingSummary(latest)}
                             </td>
                             <td className="px-4 py-3 text-ivory/70">
                               {latest.arrival_time || "—"}

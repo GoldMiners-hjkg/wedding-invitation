@@ -36,7 +36,9 @@ export function buildRsvpCsv(responses: RSVPResponse[]) {
       ? formatHotelCheckInDates(response.hotel_check_in_dates)
       : "",
     response.hotel_needed ? (response.hotel_num_guests ?? "") : "",
-    response.hotel_needed ? hotelNightCount(response.hotel_check_in_dates) : "",
+    response.hotel_needed
+      ? (response.hotel_num_nights ?? hotelNightCount(response.hotel_check_in_dates))
+      : "",
     response.arrival_time ?? "",
     response.flight_number ?? "",
     response.flight_arrival_time ?? "",

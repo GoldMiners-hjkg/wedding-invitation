@@ -7,14 +7,18 @@ import type { RsvpInsertPayload, RsvpStorage } from "../types";
 const demoStore: RSVPResponse[] = [...DEMO_RSVP_RESPONSES];
 
 function payloadToResponse(id: string, payload: RsvpInsertPayload): RSVPResponse {
+  const hotel_check_in_dates = parseHotelCheckInDates(payload.hotel_check_in_time);
   return {
     id,
     full_name: payload.full_name,
     attending: payload.attending,
     num_guests: payload.num_guests,
     hotel_needed: payload.hotel_needed,
-    hotel_check_in_dates: parseHotelCheckInDates(payload.hotel_check_in_time),
+    hotel_check_in_dates,
     hotel_num_guests: payload.hotel_num_guests ?? 1,
+    hotel_num_nights: payload.hotel_needed
+      ? (payload.hotel_num_nights ?? hotel_check_in_dates.length)
+      : null,
     arrival_time: payload.arrival_time ?? "",
     flight_number: payload.flight_number ?? "",
     flight_arrival_time: payload.flight_arrival_time ?? "",

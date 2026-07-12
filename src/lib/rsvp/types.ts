@@ -1,5 +1,5 @@
 import type { RSVPFormData, RSVPResponse } from "@/lib/types";
-import { serializeHotelCheckInDates } from "@/lib/wedding";
+import { hotelNightCount, serializeHotelCheckInDates } from "@/lib/wedding";
 
 export type RsvpStorageDriver = "supabase" | "postgres" | "sqlite" | "demo";
 
@@ -10,6 +10,7 @@ export interface RsvpInsertPayload {
   hotel_needed: boolean;
   hotel_check_in_time: string | null;
   hotel_num_guests: number | null;
+  hotel_num_nights: number | null;
   arrival_time: string | null;
   flight_number: string | null;
   flight_arrival_time: string | null;
@@ -33,6 +34,10 @@ export function formToInsertPayload(body: RSVPFormData): RsvpInsertPayload {
     body.hotel_needed && body.hotel_check_in_dates.length > 0
       ? serializeHotelCheckInDates(body.hotel_check_in_dates)
       : null;
+  const nights =
+    body.hotel_needed && hotelDates
+      ? hotelNightCount(body.hotel_check_in_dates)
+      : null;
 
   return {
     full_name: body.full_name.trim(),
@@ -41,6 +46,7 @@ export function formToInsertPayload(body: RSVPFormData): RsvpInsertPayload {
     hotel_needed: body.hotel_needed ?? false,
     hotel_check_in_time: hotelDates,
     hotel_num_guests: body.hotel_needed ? (body.hotel_num_guests ?? 1) : null,
+    hotel_num_nights: nights,
     arrival_time: body.arrival_time || null,
     flight_number: body.flight_number?.trim() || null,
     flight_arrival_time: body.flight_arrival_time?.trim() || null,

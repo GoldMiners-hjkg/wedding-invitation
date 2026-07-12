@@ -16,5 +16,7 @@ export interface RSVPFormData {
 export interface RSVPResponse extends RSVPFormData {
   id: string;
   attending: boolean;
+  /** Persisted night count for hotel booking (1 or 2); null if no hotel */
+  hotel_num_nights: number | null;
   created_at: string;
 }

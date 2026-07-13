@@ -13,7 +13,7 @@ const P = "/images/invite/photos";
 const D = "/images/invite/decor";
 
 /** Design canvas size from the original H5 (px) */
-export const INVITE_DESIGN = { width: 375, height: 5920 } as const;
+export const INVITE_DESIGN = { width: 375, height: 5730 } as const;
 
 /** Replace these paths with your own files */
 export const INVITE_PHOTOS = {

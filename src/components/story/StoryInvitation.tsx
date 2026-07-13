@@ -512,10 +512,10 @@ export function StoryInvitation() {
           w={375}
           text={i.heartPoemSecondary}
           className="invite-en invite-ink-black"
-          style={{ lineHeight: 1.35 }}
+          style={{ lineHeight: 1.45 }}
         />
         <Txt
-          top={2150}
+          top={2220}
           left={0}
           w={375}
           text={i.welcomeEn}
@@ -524,29 +524,29 @@ export function StoryInvitation() {
         />
 
         {/* Photo stack on black */}
-        <Box top={2181} left={-4} w={384} h={806} className="invite-block-black" />
-        <Decor src={d.stackFrame} top={2176} left={-4} w={383} h={713} />
-        <Photo src={p.stack1} top={2197} left={24} w={327} h={214} />
+        <Box top={2270} left={-4} w={384} h={806} className="invite-block-black" />
+        <Decor src={d.stackFrame} top={2265} left={-4} w={383} h={713} />
+        <Photo src={p.stack1} top={2286} left={24} w={327} h={214} />
         <Txt
-          top={2387}
+          top={2476}
           left={0}
           w={375}
           text={i.stackQuote1}
           className="invite-en invite-en--sm invite-ink-white"
           style={{ letterSpacing: "0.12em" }}
         />
-        <Photo src={p.stack2} top={2426} left={24} w={327} h={214} />
+        <Photo src={p.stack2} top={2515} left={24} w={327} h={214} />
         <Txt
-          top={2617}
+          top={2706}
           left={0}
           w={375}
           text={i.stackQuote2}
           className="invite-en invite-en--sm invite-ink-white"
           style={{ letterSpacing: "0.12em" }}
         />
-        <Photo src={p.stack3} top={2654} left={24} w={327} h={214} />
+        <Photo src={p.stack3} top={2743} left={24} w={327} h={214} />
         <Txt
-          top={2846}
+          top={2935}
           left={0}
           w={375}
           text={i.stackQuote3}
@@ -554,41 +554,22 @@ export function StoryInvitation() {
           style={{ letterSpacing: "0.08em" }}
         />
 
-        <Box top={2884} left={0} w={375} h={85} className="invite-countdown-wrap">
+        <Box top={2973} left={0} w={375} h={85} className="invite-countdown-wrap">
           <StoryCountdown />
         </Box>
 
-        <Txt
-          top={3048}
-          left={0}
-          w={375}
-          text={i.onlyYou}
-          className="invite-zh invite-zh--light invite-ink-black"
-          style={{ lineHeight: 1.8, letterSpacing: "0.18em" }}
-        />
+        <Photo src={p.tall} top={3100} left={49} w={299} h={425} />
+        <Decor src={d.leaf1} top={3118} left={21} w={20} h={54} />
+        <Decor src={d.leaf2} top={3275} left={21} w={20} h={54} />
+        <Photo src={p.cutout} top={3347} left={-4} w={256} h={441} />
+        <Decor src={d.leaf3} top={3433} left={23} w={16} h={65} />
+        <Dot top={3567} left={350} />
+        <Decor src={d.quoteBannerR} top={3614} left={199} w={162} h={35} />
 
-        <Photo src={p.tall} top={3172} left={49} w={299} h={425} />
-        <Decor src={d.leaf1} top={3190} left={21} w={20} h={54} />
-        <Decor src={d.leaf2} top={3347} left={21} w={20} h={54} />
-        <Photo src={p.cutout} top={3419} left={-4} w={256} h={441} />
-        <Decor src={d.leaf3} top={3505} left={23} w={16} h={65} />
-        <Dot top={3639} left={350} />
-        <Decor src={d.quoteBannerR} top={3686} left={199} w={162} h={35} />
-
-        {/* Keep spring poem on cream — not over the cutout */}
+        <Photo src={p.wide1} top={3840} left={-4} w={383} h={200} />
+        <Photo src={p.wide2} top={4040} left={-4} w={383} h={200} />
         <Txt
-          top={3878}
-          left={28}
-          w={319}
-          text={i.spring}
-          className="invite-zh invite-zh--light invite-ink-black text-right invite-spring"
-          style={{ lineHeight: 1.85, letterSpacing: "0.12em" }}
-        />
-
-        <Photo src={p.wide1} top={3990} left={-4} w={383} h={200} />
-        <Photo src={p.wide2} top={4190} left={-4} w={383} h={200} />
-        <Txt
-          top={4360}
+          top={4210}
           left={0}
           w={375}
           text={i.inviteEn}
@@ -596,10 +577,10 @@ export function StoryInvitation() {
           style={{ letterSpacing: "0.2em" }}
         />
 
-        <Dot top={4448} left={182} />
-        <Decor src={d.quoteBannerC} top={4478} left={88} w={199} h={27} />
+        <Dot top={4298} left={182} />
+        <Decor src={d.quoteBannerC} top={4328} left={88} w={199} h={27} />
         <Txt
-          top={4545}
+          top={4395}
           left={0}
           w={375}
           text={i.meet}
@@ -607,24 +588,25 @@ export function StoryInvitation() {
           style={{ lineHeight: 1.8, letterSpacing: "0.18em" }}
         />
         <Txt
-          top={4572}
+          top={4500}
           left={0}
           w={375}
           text={i.meetSecondary}
           className="invite-en invite-ink-black"
+          style={{ lineHeight: 1.45 }}
         />
 
         {/* Calendar photo — full image, no old polaroid frame */}
         <Photo
           src={p.calendarPhoto}
-          top={4635}
+          top={4600}
           left={0}
           w={375}
           h={481}
           className="invite-calendar-shot"
         />
         <Txt
-          top={5140}
+          top={5105}
           left={0}
           w={375}
           text={i.dateLong}
@@ -632,30 +614,13 @@ export function StoryInvitation() {
           style={{ lineHeight: 1.8, letterSpacing: "0.12em" }}
         />
 
-        <Txt
-          top={5250}
-          left={0}
-          w={375}
-          text={i.happiness}
-          className="invite-zh invite-ink-black"
-          style={{ lineHeight: 1.8, letterSpacing: "0.12em" }}
-        />
-
-        <Txt
-          top={5330}
-          left={0}
-          w={375}
-          text={i.pride}
-          className="invite-zh invite-ink-black"
-          style={{ lineHeight: 1.8, letterSpacing: "0.12em" }}
-        />
-        <Dot top={5460} left={182} />
-        <Decor src={d.venueBanner} top={5500} left={98} w={180} h={44} />
+        <Dot top={5235} left={182} />
+        <Decor src={d.venueBanner} top={5275} left={98} w={180} h={44} />
 
         <Photo
           src={p.hotelA}
           alt={venueName}
-          top={5560}
+          top={5335}
           left={14}
           w={168}
           h={175}
@@ -664,14 +629,14 @@ export function StoryInvitation() {
         <Photo
           src={p.hotelB}
           alt={venueName}
-          top={5610}
+          top={5385}
           left={193}
           w={168}
           h={175}
           className="invite-hotel-shot invite-hotel-shot--b"
         />
         <Txt
-          top={5800}
+          top={5575}
           left={0}
           w={375}
           text={`${venueName}\n${venueDetail}`}

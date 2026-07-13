@@ -41,9 +41,9 @@ const inviteEn: InviteCopy = {
   letterSecondary:
     "To Our Family And Friends,\nThank You For Celebrating Our Special Day,\nSupporting Us And Sharing Our Love.",
   heartPoem:
-    "My heart\nlike a bird in the wilderness\nhas found in your eyes\nits own sky",
+    "如潮汐终将相遇，\n如微风终将停留。\n我们找到了彼此，\n也期待与您分享这份幸福。",
   heartPoemSecondary:
-    "My heart, the bird of the wilderness\nhas found its sky in your eye.",
+    "Like the tides that always find the shore,\nand the breeze that gently lingers,\nwe found each other.\nWe would be honored to celebrate this joy with you.",
   welcomeEn: "WELCOME TO WEDDING",
   stackQuote1: "I love three things in this world.",
   stackQuote2: "Sun, moon and you.",
@@ -52,8 +52,10 @@ const inviteEn: InviteCopy = {
     "There may be many beautiful things in this world\nbut the most beautiful in my heart is only you",
   spring:
     "/ May the spring breeze be gentle with you\nsweep away the restless, leave only tenderness",
-  meet: '"After all the circling roads, I met you — and the world became endlessly beautiful"',
-  meetSecondary: '"love and freedom. you and gentleness"',
+  meet:
+    "海风轻拂，浪花低语。\n在蓝天与大海的见证下，\n我们将携手展开人生新的篇章。",
+  meetSecondary:
+    "With the sea breeze as our witness\nand the endless ocean before us,\nwe begin the next chapter of our lives together.",
   dateLong: "Sunday, January 24, 2027\nLunar Dec 17 · 15:00",
   happiness:
     '"The greatest happiness is placing my hand in yours\nand walking with you\nthrough this romantic life"',
@@ -80,9 +82,9 @@ const inviteZhCN: InviteCopy = {
   letterSecondary:
     "To Our Family And Friends,\nThank You For Celebrating Our Special Day,\nSupporting Us And Sharing Our Love.",
   heartPoem:
-    "我的心\n如身在旷野的小鸟\n已经从你的眼睛里找到了\n自己的天空",
+    "如潮汐终将相遇，\n如微风终将停留。\n我们找到了彼此，\n也期待与您分享这份幸福。",
   heartPoemSecondary:
-    "My heart, the bird of the wilderness\nhas found its sky in your eye.",
+    "Like the tides that always find the shore,\nand the breeze that gently lingers,\nwe found each other.\nWe would be honored to celebrate this joy with you.",
   welcomeEn: "WELCOME TO WEDDING",
   stackQuote1: "I love three things in this world.",
   stackQuote2: "Sun, moon and you.",
@@ -90,8 +92,10 @@ const inviteZhCN: InviteCopy = {
   onlyYou:
     "也许这世界上美好的事情很多\n但我心底最美好的人，只有你一个",
   spring: "/ 希望春风能对你温柔点\n拂去烦躁，满目皆是柔情",
-  meet: "“兜兜圈圈遇到你，至此世间无限美好”",
-  meetSecondary: '"love and freedom. you and gentleness"',
+  meet:
+    "海风轻拂，浪花低语。\n在蓝天与大海的见证下，\n我们将携手展开人生新的篇章。",
+  meetSecondary:
+    "With the sea breeze as our witness\nand the endless ocean before us,\nwe begin the next chapter of our lives together.",
   dateLong: "2027年1月24日 星期日\n农历腊月十七 15:00",
   happiness:
     '"最大的幸福就是能把自己的手放在你的手心\n与你一起\n走完这浪漫的一生"',
@@ -118,9 +122,9 @@ const inviteZhTW: InviteCopy = {
   letterSecondary:
     "To Our Family And Friends,\nThank You For Celebrating Our Special Day,\nSupporting Us And Sharing Our Love.",
   heartPoem:
-    "我的心\n如身在曠野的小鳥\n已經從你的眼睛裡找到了\n自己的天空",
+    "如潮汐終將相遇，\n如微風終將停留。\n我們找到了彼此，\n也期待與您分享這份幸福。",
   heartPoemSecondary:
-    "My heart, the bird of the wilderness\nhas found its sky in your eye.",
+    "Like the tides that always find the shore,\nand the breeze that gently lingers,\nwe found each other.\nWe would be honored to celebrate this joy with you.",
   welcomeEn: "WELCOME TO WEDDING",
   stackQuote1: "I love three things in this world.",
   stackQuote2: "Sun, moon and you.",
@@ -128,8 +132,10 @@ const inviteZhTW: InviteCopy = {
   onlyYou:
     "也許這世界上美好的事情很多\n但我心底最美好的人，只有你一個",
   spring: "/ 希望春風能對你溫柔點\n拂去煩躁，滿目皆是柔情",
-  meet: "「兜兜圈圈遇到你，至此世間無限美好」",
-  meetSecondary: '"love and freedom. you and gentleness"',
+  meet:
+    "海風輕拂，浪花低語。\n在藍天與大海的見證下，\n我們將攜手展開人生新的篇章。",
+  meetSecondary:
+    "With the sea breeze as our witness\nand the endless ocean before us,\nwe begin the next chapter of our lives together.",
   dateLong: "2027年1月24日 星期日\n農曆臘月十七 15:00",
   happiness:
     "「最大的幸福就是能把自己的手放在你的手心\n與你一起\n走完這浪漫的一生」",

@@ -13,7 +13,7 @@ const en: Omit<Translations, "invite"> = {
     venueAddress:
       "No. 3-1 Haishi Road, Clear Water Bay Avenue, Yingzhou Town, Lingshui, Hainan 572400",
     venueDetail: "Waterfront resort · Ceremony · Reception · Dinner",
-    rsvpDeadline: "December 24, 2026",
+    rsvpDeadline: "August 31, 2026",
   },
   hero: {
     welcome: "Welcome to our wedding",
@@ -41,7 +41,7 @@ const en: Omit<Translations, "invite"> = {
   rsvp: {
     label: "RSVP",
     title: "Will you join us?",
-    deadline: "Please respond by",
+    deadline: "Please respond by the date below so we can arrange accommodations in advance",
     fullName: "Full Name",
     fullNamePlaceholder: "Your full name",
     attending: "Attending",
@@ -78,10 +78,10 @@ const en: Omit<Translations, "invite"> = {
     notePlaceholder: "A message, song request, or well wishes...",
     submit: "Submit RSVP",
     sending: "Sending...",
-    thankYouAttending: "We can't wait to see you!",
+    thankYouAttending: "Looking forward to seeing you on January 24!",
     thankYouDeclining: "We'll miss you",
     thankYouAttendingMsg:
-      "Thank you, {name}! Your RSVP has been received. We look forward to celebrating with you.",
+      "Thank you, {name}! Your RSVP has been received. We look forward to celebrating with you on January 24.",
     thankYouDecliningMsg:
       "Thank you for letting us know, {name}. We're sorry you can't make it — you'll be in our hearts on the day.",
     errName: "Please enter your full name",
@@ -292,7 +292,7 @@ const zhCN: Omit<Translations, "invite"> = {
     venue: "海南清水湾金普顿酒店",
     venueAddress: "海南省陵水黎族自治县英州镇清水湾大道海丝路3号-1",
     venueDetail: "临海度假酒店 · 仪式 · 香槟接待 · 晚宴",
-    rsvpDeadline: "2026年12月24日",
+    rsvpDeadline: "2026年8月31日",
   },
   hero: {
     welcome: "Welcome to our wedding",
@@ -319,7 +319,7 @@ const zhCN: Omit<Translations, "invite"> = {
   rsvp: {
     label: "出席确认",
     title: "您是否出席？",
-    deadline: "请于以下日期前回复",
+    deadline: "请于以下日期前回复，以便我们提前安排住宿等事宜",
     fullName: "姓名",
     fullNamePlaceholder: "请输入您的全名",
     attending: "是否出席",
@@ -355,10 +355,10 @@ const zhCN: Omit<Translations, "invite"> = {
     notePlaceholder: "祝福、点歌或想说的话……",
     submit: "提交回复",
     sending: "提交中……",
-    thankYouAttending: "期待与您相见！",
+    thankYouAttending: "期待与您在1月24日相见！",
     thankYouDeclining: "我们会想念您",
     thankYouAttendingMsg:
-      "感谢 {name}！我们已收到您的回复，期待与您共同庆祝。",
+      "感谢 {name}！我们已收到您的回复，期待与您在1月24日欢聚。",
     thankYouDecliningMsg:
       "感谢 {name} 告知我们。虽遗憾您无法出席，但您的心意我们铭记于心。",
     errName: "请输入您的姓名",
@@ -550,7 +550,7 @@ const zhTW: Omit<Translations, "invite"> = {
     venue: "海南清水灣金普頓酒店",
     venueAddress: "海南省陵水黎族自治縣英州鎮清水灣大道海絲路3號-1",
     venueDetail: "臨海度假酒店 · 儀式 · 香檳接待 · 晚宴",
-    rsvpDeadline: "2026年12月24日",
+    rsvpDeadline: "2026年8月31日",
   },
   hero: {
     welcome: "Welcome to our wedding",
@@ -577,7 +577,7 @@ const zhTW: Omit<Translations, "invite"> = {
   rsvp: {
     label: "出席確認",
     title: "您是否出席？",
-    deadline: "請於以下日期前回覆",
+    deadline: "請於以下日期前回覆，以便我們提前安排住宿等事宜",
     fullName: "姓名",
     fullNamePlaceholder: "請輸入您的全名",
     attending: "是否出席",
@@ -613,10 +613,10 @@ const zhTW: Omit<Translations, "invite"> = {
     notePlaceholder: "祝福、點歌或想說的話……",
     submit: "提交回覆",
     sending: "提交中……",
-    thankYouAttending: "期待與您相見！",
+    thankYouAttending: "期待與您在1月24日相見！",
     thankYouDeclining: "我們會想念您",
     thankYouAttendingMsg:
-      "感謝 {name}！我們已收到您的回覆，期待與您共同慶祝。",
+      "感謝 {name}！我們已收到您的回覆，期待與您在1月24日歡聚。",
     thankYouDecliningMsg:
       "感謝 {name} 告知我們。雖遺憾您無法出席，但您的心意我們銘記於心。",
     errName: "請輸入您的姓名",

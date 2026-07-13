@@ -17,7 +17,7 @@ const initialForm: RSVPFormData = {
   full_name: "",
   attending: null,
   num_guests: 1,
-  hotel_needed: false,
+  hotel_needed: true,
   hotel_check_in_dates: [],
   hotel_num_guests: 1,
   arrival_time: "",
@@ -203,29 +203,35 @@ export function RSVPForm() {
     <section className="relative px-6 py-20 sm:px-10">
       <ScrollReveal>
         <div className="mx-auto max-w-lg vintage-text-halo">
-          <EditorialSectionHeader>
-            <p className="text-eyebrow">{rsvp.label}</p>
-            <h2 className="text-vintage-title mt-3 text-center text-4xl sm:text-5xl">
-              {rsvp.title}
-            </h2>
-          </EditorialSectionHeader>
-          <p className="text-body-vintage mt-6 text-center">
-            {rsvp.deadline} {wedding.rsvpDeadline}
-          </p>
+          {!submitted && (
+            <>
+              <EditorialSectionHeader>
+                <p className="text-eyebrow">{rsvp.label}</p>
+                <h2 className="text-vintage-title mt-3 text-center text-4xl sm:text-5xl">
+                  {rsvp.title}
+                </h2>
+              </EditorialSectionHeader>
+              <p className="text-body-vintage mt-6 text-center">
+                {rsvp.deadline} {wedding.rsvpDeadline}
+              </p>
+            </>
+          )}
 
           {submitted ? (
-            <div className="mt-8 py-8 text-center">
-              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center border border-wine/20 bg-cream">
+            <div className="invite-rsvp-success mt-8 py-10 px-5 text-center">
+              <div className="invite-rsvp-success__icon mx-auto mb-6 flex h-16 w-16 items-center justify-center">
                 <span className="text-2xl">
                   {submitted.attending ? "🥂" : "💌"}
                 </span>
               </div>
-              <h3 className="font-heading text-3xl text-wine">
-                {submitted.attending
-                  ? rsvp.thankYouAttending
-                  : rsvp.thankYouDeclining}
-              </h3>
-              <p className="text-body-vintage mt-4">
+              {!submitted.attending && (
+                <h3 className="invite-rsvp-success__title font-heading text-3xl">
+                  {rsvp.thankYouDeclining}
+                </h3>
+              )}
+              <p
+                className={`invite-rsvp-success__msg ${submitted.attending ? "" : "mt-4"}`}
+              >
                 {interpolate(
                   submitted.attending
                     ? rsvp.thankYouAttendingMsg
@@ -465,12 +471,12 @@ export function RSVPForm() {
             className="absolute inset-0 bg-black/45 backdrop-blur-sm"
             onClick={() => !submitting && setShowHotelConfirm(false)}
           />
-          <div className="relative z-10 w-full max-w-md rounded-sm border border-wine/15 bg-cream p-6 shadow-2xl sm:p-8">
-            <p className="text-eyebrow">{rsvp.confirmHotelTitle}</p>
-            <p className="mt-4 font-heading text-2xl leading-snug text-wine">
+          <div className="invite-rsvp-confirm relative z-10 w-full max-w-md p-6 shadow-2xl sm:p-8">
+            <p className="invite-rsvp-confirm__eyebrow">{rsvp.confirmHotelTitle}</p>
+            <p className="invite-rsvp-confirm__title mt-4 font-heading text-2xl leading-snug">
               {confirmMessage}
             </p>
-            <p className="text-body-vintage mt-3">
+            <p className="invite-rsvp-confirm__body mt-3">
               {rsvp.checkInHint}
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -478,7 +484,7 @@ export function RSVPForm() {
                 type="button"
                 disabled={submitting}
                 onClick={() => setShowHotelConfirm(false)}
-                className="flex-1 rounded-full border border-wine/30 px-5 py-3 font-body text-xs font-medium tracking-wide text-wine-deep uppercase"
+                className="invite-rsvp-confirm__back flex-1 rounded-full px-5 py-3 font-body text-xs font-medium tracking-wide uppercase"
               >
                 {rsvp.confirmHotelBack}
               </button>
@@ -486,7 +492,7 @@ export function RSVPForm() {
                 type="button"
                 disabled={submitting}
                 onClick={() => void submitForm()}
-                className="flex-1 rounded-full bg-wine px-5 py-3 font-body text-xs tracking-wide text-cream uppercase disabled:opacity-50"
+                className="invite-rsvp-confirm__go flex-1 rounded-full px-5 py-3 font-body text-xs tracking-wide uppercase disabled:opacity-50"
               >
                 {submitting ? rsvp.sending : rsvp.confirmHotelProceed}
               </button>

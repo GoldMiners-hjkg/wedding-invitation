@@ -955,6 +955,69 @@ body {
   color: #baa58a !important;
 }
 
+.invite-rsvp-success {
+  background: #fff6ea !important;
+  border: 1px solid rgba(186, 165, 138, 0.45);
+  box-shadow: 0 8px 28px rgba(74, 58, 40, 0.08);
+}
+
+.invite-rsvp-success__icon {
+  border: 1px solid rgba(186, 165, 138, 0.5);
+  background: #ffffff !important;
+}
+
+.invite-rsvp-success__title {
+  color: #2a2218 !important;
+  font-weight: 500;
+}
+
+.invite-rsvp-success__msg {
+  color: #2a2218 !important;
+  font-family: "GenRyuMin TW", "Source Han Serif TC", serif;
+  font-size: clamp(1rem, 3.6vw, 1.15rem);
+  line-height: 1.75;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+
+.invite-rsvp-confirm {
+  background: #fffaf3 !important;
+  border: 1px solid rgba(186, 165, 138, 0.55);
+  color: #1f1810;
+}
+
+.invite-rsvp-confirm__eyebrow {
+  color: #6b5a45 !important;
+  font-family: var(--font-body), serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+}
+
+.invite-rsvp-confirm__title {
+  color: #1f1810 !important;
+  font-weight: 500;
+}
+
+.invite-rsvp-confirm__body {
+  color: #3d3226 !important;
+  font-family: "GenRyuMin TW", "Source Han Serif TC", serif;
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.invite-rsvp-confirm__back {
+  border: 1px solid rgba(186, 165, 138, 0.65) !important;
+  background: #fff !important;
+  color: #1f1810 !important;
+}
+
+.invite-rsvp-confirm__go {
+  background: #baa58a !important;
+  border: 1px solid #baa58a !important;
+  color: #fff !important;
+}
+
 .invite-closing {
   padding: 1.25rem 1rem 2.5rem;
   background: #fff;

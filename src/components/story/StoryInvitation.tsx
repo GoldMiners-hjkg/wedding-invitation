@@ -24,6 +24,7 @@ import { DRESS_CODE_COLORS } from "@/lib/wedding";
 import {
   configureInlineVideo,
   isWeChatBrowser,
+  playAudioInWeChat,
   playVideoInWeChat,
 } from "@/lib/wechat-video";
 
@@ -279,13 +280,52 @@ function Dot({ top, left }: { top: number; left: number }) {
 
 function BgmToggle() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const userPausedRef = useRef(false);
   const [on, setOn] = useState(false);
 
   useEffect(() => {
     const audio = new Audio(INVITE_AUDIO);
     audio.loop = true;
+    audio.preload = "auto";
     audioRef.current = audio;
+
+    let unlocked = false;
+    const tryPlay = () => {
+      if (userPausedRef.current || !audioRef.current) return Promise.resolve(false);
+      return playAudioInWeChat(audioRef.current)
+        .then(() => {
+          if (audioRef.current?.paused) return false;
+          unlocked = true;
+          setOn(true);
+          return true;
+        })
+        .catch(() => {
+          setOn(false);
+          return false;
+        });
+    };
+
+    void tryPlay();
+
+    const unlockOnGesture = () => {
+      if (unlocked || userPausedRef.current) return;
+      void tryPlay().then((ok) => {
+        if (ok) removeUnlockListeners();
+      });
+    };
+
+    const removeUnlockListeners = () => {
+      document.removeEventListener("pointerdown", unlockOnGesture);
+      document.removeEventListener("touchstart", unlockOnGesture);
+      document.removeEventListener("click", unlockOnGesture);
+    };
+
+    document.addEventListener("pointerdown", unlockOnGesture, { passive: true });
+    document.addEventListener("touchstart", unlockOnGesture, { passive: true });
+    document.addEventListener("click", unlockOnGesture);
+
     return () => {
+      removeUnlockListeners();
       audio.pause();
       audioRef.current = null;
     };
@@ -296,13 +336,16 @@ function BgmToggle() {
       type="button"
       className={`invite-bgm ${on ? "invite-bgm--on" : ""}`}
       aria-label={on ? "暂停音乐" : "播放音乐"}
-      onClick={() => {
+      onClick={(e) => {
+        e.stopPropagation();
         const audio = audioRef.current;
         if (!audio) return;
         if (on) {
+          userPausedRef.current = true;
           audio.pause();
           setOn(false);
         } else {
+          userPausedRef.current = false;
           void audio.play().then(() => setOn(true)).catch(() => setOn(false));
         }
       }}
@@ -327,8 +370,15 @@ export function StoryInvitation() {
   const bodyMd = isEn ? "invite-en invite-en--md" : "invite-zh invite-zh--md";
   const hasPoemSecondary = Boolean(i.heartPoemSecondary.trim());
   const hasMeetSecondary = Boolean(i.meetSecondary.trim());
-  /** EN shows one language block only — pull later sections up */
-  const poemGap = hasPoemSecondary ? 0 : -90;
+  /** zh/en poem blocks sit 120px apart — keep the same gap before WELCOME */
+  const heartPoemBlockGap = 120;
+  const poemSecondaryTop = 1876;
+  const poemSecondaryLines = i.heartPoemSecondary.split("\n").length;
+  const poemSecondaryHeight = poemSecondaryLines * 15 * 1.45;
+  const welcomeBaseTop = 1945;
+  const poemGap = hasPoemSecondary
+    ? poemSecondaryTop + poemSecondaryHeight + heartPoemBlockGap - welcomeBaseTop
+    : -90;
   const meetGap = hasMeetSecondary ? 0 : -80;
   const y = (top: number) => top + poemGap;
   const y2 = (top: number) => top + poemGap + meetGap;

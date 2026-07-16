@@ -33,9 +33,7 @@ export function configureInlineVideo(video: HTMLVideoElement) {
  * WeChat blocks programmatic autoplay unless play() runs inside
  * WeixinJSBridge.invoke('getNetworkType', ...) after bridge ready.
  */
-export function playVideoInWeChat(video: HTMLVideoElement) {
-  const attemptPlay = () => video.play();
-
+function playInWeChatContext(attemptPlay: () => Promise<unknown>) {
   if (!isWeChatBrowser()) {
     return attemptPlay();
   }
@@ -53,10 +51,22 @@ export function playVideoInWeChat(video: HTMLVideoElement) {
       return;
     }
 
-    document.addEventListener("WeixinJSBridgeReady", () => {
-      window.WeixinJSBridge?.invoke("getNetworkType", {}, run);
-    }, { once: true });
+    document.addEventListener(
+      "WeixinJSBridgeReady",
+      () => {
+        window.WeixinJSBridge?.invoke("getNetworkType", {}, run);
+      },
+      { once: true },
+    );
 
     window.setTimeout(run, 1200);
   });
+}
+
+export function playVideoInWeChat(video: HTMLVideoElement) {
+  return playInWeChatContext(() => video.play());
+}
+
+export function playAudioInWeChat(audio: HTMLAudioElement) {
+  return playInWeChatContext(() => audio.play());
 }

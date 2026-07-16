@@ -4,7 +4,6 @@ import { useState, type FormEvent } from "react";
 import Image from "next/image";
 import { ScrollReveal } from "./ScrollReveal";
 import {
-  GUEST_COUNT_OPTIONS,
   HOTEL_CHECK_IN_DATE_OPTIONS,
   formatHotelCheckInDates,
   hotelNightCount,
@@ -161,7 +160,11 @@ export function RSVPForm() {
       const res = await fetch("/api/rsvp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          num_guests: 1,
+          hotel_num_guests: 1,
+        }),
       });
 
       if (!res.ok) {
@@ -301,26 +304,6 @@ export function RSVPForm() {
               </div>
 
               {form.attending && (
-                <div>
-                  <FieldLabel>{rsvp.guests}</FieldLabel>
-                  <select
-                    value={form.num_guests}
-                    onChange={(e) =>
-                      update("num_guests", Number(e.target.value))
-                    }
-                    className={inputClass}
-                  >
-                    {GUEST_COUNT_OPTIONS.map((n) => (
-                      <option key={n} value={n}>
-                        {n}{" "}
-                        {n === 1 ? rsvp.guest : rsvp.guestsPlural}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-
-              {form.attending && (
                 <>
                   <div>
                     <FieldLabel>{rsvp.hotel}</FieldLabel>
@@ -367,23 +350,6 @@ export function RSVPForm() {
                             {errors.hotel_check_in_dates}
                           </p>
                         )}
-                      </div>
-                      <div>
-                        <FieldLabel>{rsvp.hotelGuests}</FieldLabel>
-                        <select
-                          value={form.hotel_num_guests}
-                          onChange={(e) =>
-                            update("hotel_num_guests", Number(e.target.value))
-                          }
-                          className={inputClass}
-                        >
-                          {GUEST_COUNT_OPTIONS.map((n) => (
-                            <option key={n} value={n}>
-                              {n}{" "}
-                              {n === 1 ? rsvp.guest : rsvp.guestsPlural}
-                            </option>
-                          ))}
-                        </select>
                       </div>
                     </div>
                   )}

@@ -10,6 +10,7 @@ export type InviteCopy = {
   heartPoem: string;
   heartPoemSecondary: string;
   welcomeEn: string;
+  wideWelcomeEn: string;
   stackQuote1: string;
   stackQuote2: string;
   stackQuote3: string;
@@ -33,7 +34,7 @@ export type InviteCopy = {
 const inviteEn: InviteCopy = {
   heroTag: "See you at the wedding",
   inviteTitle: "Our Wedding Invitation",
-  inviteEn: "FALL IN LOVE WEDDING",
+  inviteEn: "To Our Wedding",
   stripQuote:
     "As the clouds and mist dissipate, I love you and everyone knows it",
   letter:
@@ -41,10 +42,10 @@ const inviteEn: InviteCopy = {
   letterSecondary:
     "To Our Family And Friends,\nThank You For Celebrating Our Special Day,\nSupporting Us And Sharing Our Love.",
   heartPoem:
-    "如潮汐终将相遇，\n如微风终将停留。\n我们找到了彼此，\n也期待与您分享这份幸福。",
-  heartPoemSecondary:
     "Like the tides that always find the shore,\nand the breeze that gently lingers,\nwe found each other.\nWe would be honored to celebrate this joy with you.",
+  heartPoemSecondary: "",
   welcomeEn: "WELCOME TO WEDDING",
+  wideWelcomeEn: "WELCOME TO OUR WEDDING",
   stackQuote1: "I love three things in this world.",
   stackQuote2: "Sun, moon and you.",
   stackQuote3: "Sun for morning, moon for night, and you forever.",
@@ -53,9 +54,8 @@ const inviteEn: InviteCopy = {
   spring:
     "/ May the spring breeze be gentle with you\nsweep away the restless, leave only tenderness",
   meet:
-    "海风轻拂，浪花低语。\n在蓝天与大海的见证下，\n我们将携手展开人生新的篇章。",
-  meetSecondary:
     "With the sea breeze as our witness\nand the endless ocean before us,\nwe begin the next chapter of our lives together.",
+  meetSecondary: "",
   dateLong: "Sunday, January 24, 2027\nLunar Dec 17 · 15:00",
   happiness:
     '"The greatest happiness is placing my hand in yours\nand walking with you\nthrough this romantic life"',
@@ -64,17 +64,17 @@ const inviteEn: InviteCopy = {
     "/ To make our private romance public again and again\nis to feel, again and again, that having you is worth celebrating",
   openNav: "Open Maps",
   playVideo: "Play video",
-  countdownDays: "D",
-  countdownHours: "H",
-  countdownMins: "M",
-  countdownSecs: "S",
+  countdownDays: "Days",
+  countdownHours: "Hrs",
+  countdownMins: "Mins",
+  countdownSecs: "Secs",
   weekdays: ["S", "M", "T", "W", "T", "F", "S"],
 };
 
 const inviteZhCN: InviteCopy = {
   heroTag: "婚礼见",
   inviteTitle: "我们的「婚礼邀请」",
-  inviteEn: "FALL IN LOVE WEDDING",
+  inviteEn: "To Our Wedding",
   stripQuote:
     "As the clouds and mist dissipate, I love you and everyone knows it",
   letter:
@@ -86,6 +86,7 @@ const inviteZhCN: InviteCopy = {
   heartPoemSecondary:
     "Like the tides that always find the shore,\nand the breeze that gently lingers,\nwe found each other.\nWe would be honored to celebrate this joy with you.",
   welcomeEn: "WELCOME TO WEDDING",
+  wideWelcomeEn: "WELCOME TO OUR WEDDING",
   stackQuote1: "I love three things in this world.",
   stackQuote2: "Sun, moon and you.",
   stackQuote3: "Sun for morning, moon for night, and you forever.",
@@ -114,7 +115,7 @@ const inviteZhCN: InviteCopy = {
 const inviteZhTW: InviteCopy = {
   heroTag: "婚禮見",
   inviteTitle: "我們的「婚禮邀請」",
-  inviteEn: "FALL IN LOVE WEDDING",
+  inviteEn: "To Our Wedding",
   stripQuote:
     "As the clouds and mist dissipate, I love you and everyone knows it",
   letter:
@@ -126,6 +127,7 @@ const inviteZhTW: InviteCopy = {
   heartPoemSecondary:
     "Like the tides that always find the shore,\nand the breeze that gently lingers,\nwe found each other.\nWe would be honored to celebrate this joy with you.",
   welcomeEn: "WELCOME TO WEDDING",
+  wideWelcomeEn: "WELCOME TO OUR WEDDING",
   stackQuote1: "I love three things in this world.",
   stackQuote2: "Sun, moon and you.",
   stackQuote3: "Sun for morning, moon for night, and you forever.",

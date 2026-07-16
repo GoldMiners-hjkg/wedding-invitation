@@ -219,6 +219,7 @@ function Decor({
   w,
   h,
   className = "",
+  style,
 }: {
   src: string;
   top: number;
@@ -226,9 +227,10 @@ function Decor({
   w: number;
   h: number;
   className?: string;
+  style?: CSSProperties;
 }) {
   return (
-    <Box top={top} left={left} w={w} h={h} className={className}>
+    <Box top={top} left={left} w={w} h={h} className={className} style={style}>
       <Image
         src={src}
         alt=""
@@ -321,9 +323,18 @@ export function StoryInvitation() {
   const isEn = locale === "en";
   const heroTagTop = isEn ? 192 : 198;
   const heroDateTop = isEn ? 268 : 236;
+  const bodyFont = isEn ? "invite-en" : "invite-zh";
+  const bodyMd = isEn ? "invite-en invite-en--md" : "invite-zh invite-zh--md";
+  const hasPoemSecondary = Boolean(i.heartPoemSecondary.trim());
+  const hasMeetSecondary = Boolean(i.meetSecondary.trim());
+  /** EN shows one language block only — pull later sections up */
+  const poemGap = hasPoemSecondary ? 0 : -90;
+  const meetGap = hasMeetSecondary ? 0 : -80;
+  const y = (top: number) => top + poemGap;
+  const y2 = (top: number) => top + poemGap + meetGap;
 
   return (
-    <div className="invite-root">
+    <div className={`invite-root${isEn ? " invite-root--en" : ""}`}>
       <BgmToggle />
       <div
         className="invite-canvas"
@@ -377,54 +388,56 @@ export function StoryInvitation() {
           style={{ letterSpacing: isEn ? "0.14em" : "0.22em" }}
         />
 
-        {/* Names under hero */}
+        {/* Names under hero — EN leads with English names */}
         <Txt
           top={556}
           left={0}
           w={168}
-          text={m.groomZh}
-          className="invite-zh invite-zh--md invite-ink-white invite-hero-name text-right"
-          style={{ letterSpacing: "0.08em" }}
+          text={isEn ? m.groomEn : m.groomZh}
+          className={`${bodyMd} invite-ink-white invite-hero-name text-right`}
+          style={{ letterSpacing: isEn ? "0.04em" : "0.08em" }}
         />
         <Txt
           top={556}
           left={172}
           w={32}
           text="/"
-          className="invite-zh invite-zh--md invite-ink-white invite-hero-name text-center"
+          className={`${bodyMd} invite-ink-white invite-hero-name text-center`}
         />
         <Txt
           top={556}
           left={207}
           w={168}
-          text={m.brideZh}
-          className="invite-zh invite-zh--md invite-ink-white invite-hero-name text-left"
-          style={{ letterSpacing: "0.08em" }}
+          text={isEn ? m.brideEn : m.brideZh}
+          className={`${bodyMd} invite-ink-white invite-hero-name text-left`}
+          style={{ letterSpacing: isEn ? "0.04em" : "0.08em" }}
         />
         <Txt
           top={576}
           left={0}
           w={168}
-          text={m.groomEn}
-          className="invite-en invite-en--sm invite-ink-white invite-hero-name text-right"
+          text={isEn ? m.groomZh : m.groomEn}
+          className={`${isEn ? "invite-zh" : "invite-en invite-en--sm"} invite-ink-white invite-hero-name text-right`}
+          style={isEn ? { fontSize: "clamp(11px, 3vw, 13px)" } : undefined}
         />
         <Txt
           top={576}
           left={207}
           w={168}
-          text={m.brideEn}
-          className="invite-en invite-en--sm invite-ink-white invite-hero-name text-left"
+          text={isEn ? m.brideZh : m.brideEn}
+          className={`${isEn ? "invite-zh" : "invite-en invite-en--sm"} invite-ink-white invite-hero-name text-left`}
+          style={isEn ? { fontSize: "clamp(11px, 3vw, 13px)" } : undefined}
         />
 
         <Dot top={632} left={182} />
-        <Decor src={d.titleBanner} top={668} left={120} w={135} h={31} />
+        <Decor src={d.titleBanner} top={662} left={120} w={135} h={31} />
         <Txt
-          top={708}
+          top={726}
           left={0}
           w={375}
           text={i.inviteTitle}
-          className="invite-zh invite-ink-black"
-          style={{ letterSpacing: "0.6em" }}
+          className={`${bodyFont} invite-ink-black`}
+          style={{ letterSpacing: isEn ? "0.12em" : "0.6em" }}
         />
         <Txt
           top={760}
@@ -432,7 +445,7 @@ export function StoryInvitation() {
           w={375}
           text={i.inviteEn}
           className="invite-en invite-ink-black"
-          style={{ letterSpacing: "0.35em" }}
+          style={{ letterSpacing: "0.12em" }}
         />
 
         {/* Strip + letter */}
@@ -443,79 +456,126 @@ export function StoryInvitation() {
           left={0}
           w={375}
           text={i.stripQuote}
-          className="invite-en invite-en--sm invite-ink-white"
+          className="invite-en invite-ink-white"
+          style={{ padding: "0 0.75rem", boxSizing: "border-box" }}
         />
         <Txt
           top={1045}
           left={0}
           w={375}
           text={i.letter}
-          className="invite-zh invite-ink-black"
-          style={{ lineHeight: 2, letterSpacing: "0.12em" }}
+          className={`${bodyFont} invite-ink-black`}
+          style={{
+            lineHeight: isEn ? 1.55 : 2,
+            letterSpacing: isEn ? "0.04em" : "0.12em",
+            padding: isEn ? "0 0.85rem" : undefined,
+            boxSizing: "border-box",
+          }}
+        />
+        <Decor
+          src={d.seaweedVine}
+          top={910}
+          left={-83}
+          w={120}
+          h={420}
+          className="invite-seaweed"
+          style={{ transform: "scaleX(-1) rotate(12deg)" }}
+        />
+        <Decor
+          src={d.seaweedVine}
+          top={1040}
+          left={338}
+          w={120}
+          h={420}
+          className="invite-seaweed"
+          style={{ transform: "rotate(12deg)" }}
         />
         <Txt
-          top={1245}
+          top={isEn ? 1220 : 1245}
           left={0}
           w={375}
           text={i.letterSecondary}
           className="invite-en invite-ink-black"
-          style={{ lineHeight: 1.35 }}
+          style={{ lineHeight: 1.45 }}
         />
-
-        <Dot top={1325} left={182} />
-        <Decor src={d.sectionBanner} top={1358} left={98} w={180} h={33} />
+        <Dot top={1340} left={182} />
+        <Decor src={d.sectionBanner} top={1370} left={98} w={180} h={33} />
 
         {/* Dual portraits */}
-        <Photo src={p.portraitA} top={1415} left={32} w={144} h={206} />
-        <Photo src={p.portraitB} top={1415} left={200} w={144} h={206} />
+        <Photo src={p.portraitA} top={1436} left={32} w={144} h={206} />
+        <Photo src={p.portraitB} top={1436} left={200} w={144} h={206} />
         <Txt
-          top={1640}
+          top={1661}
           left={67}
           w={74}
           text="|"
-          className="invite-zh invite-ink-black text-center"
+          className={`${bodyFont} invite-ink-black text-center`}
         />
         <Txt
-          top={1640}
+          top={1661}
           left={235}
           w={74}
           text="|"
-          className="invite-zh invite-ink-black text-center"
+          className={`${bodyFont} invite-ink-black text-center`}
         />
         <Txt
-          top={1678}
+          top={1699}
           left={36}
           w={135}
-          text={m.brideZh}
-          className="invite-zh invite-zh--md invite-ink-black text-center"
-          style={{ letterSpacing: "0.15em" }}
+          text={isEn ? m.brideEn : m.brideZh}
+          className={`${bodyMd} invite-ink-black text-center`}
+          style={{ letterSpacing: isEn ? "0.04em" : "0.15em" }}
         />
         <Txt
-          top={1678}
+          top={1699}
           left={204}
           w={135}
-          text={m.groomZh}
-          className="invite-zh invite-zh--md invite-ink-black text-center"
-          style={{ letterSpacing: "0.15em" }}
+          text={isEn ? m.groomEn : m.groomZh}
+          className={`${bodyMd} invite-ink-black text-center`}
+          style={{ letterSpacing: isEn ? "0.04em" : "0.15em" }}
         />
         <Txt
-          top={1735}
+          top={1756}
           left={0}
           w={375}
           text={i.heartPoem}
-          className="invite-zh invite-ink-black"
-          style={{ lineHeight: 2, letterSpacing: "0.12em" }}
+          className={`${bodyFont} invite-ink-black`}
+          style={{
+            lineHeight: isEn ? 1.5 : 2,
+            letterSpacing: isEn ? "0.04em" : "0.12em",
+            padding: isEn ? "0 0.85rem" : undefined,
+            boxSizing: "border-box",
+          }}
         />
-        <Txt
-          top={1855}
-          left={0}
-          w={375}
-          text={i.heartPoemSecondary}
-          className="invite-en invite-ink-black"
-          style={{ lineHeight: 1.45 }}
+        <Decor
+          src={d.starfish}
+          top={1766}
+          left={8}
+          w={78}
+          h={76}
+          className="invite-starfish"
         />
+        <Decor
+          src={d.starfish}
+          top={1899}
+          left={318}
+          w={64}
+          h={62}
+          className="invite-starfish"
+          style={{ transform: "rotate(-18deg)" }}
+        />
+        {hasPoemSecondary ? (
+          <Txt
+            top={1876}
+            left={0}
+            w={375}
+            text={i.heartPoemSecondary}
+            className="invite-en invite-ink-black"
+            style={{ lineHeight: 1.45 }}
+          />
+        ) : null}
         <Txt
-          top={1945}
+          top={y(1945)}
           left={0}
           w={375}
           text={i.welcomeEn}
@@ -524,103 +584,125 @@ export function StoryInvitation() {
         />
 
         {/* Photo stack on black */}
-        <Box top={1985} left={-4} w={384} h={806} className="invite-block-black" />
-        <Decor src={d.stackFrame} top={1980} left={-4} w={383} h={713} />
-        <Photo src={p.stack1} top={2001} left={24} w={327} h={214} />
+        <Box top={y(1985)} left={-4} w={384} h={806} className="invite-block-black" />
+        <Decor src={d.stackFrame} top={y(1980)} left={-4} w={383} h={713} />
+        <Photo src={p.stack1} top={y(2001)} left={24} w={327} h={214} />
         <Txt
-          top={2191}
+          top={y(2191)}
           left={0}
           w={375}
           text={i.stackQuote1}
-          className="invite-en invite-en--sm invite-ink-white"
-          style={{ letterSpacing: "0.12em" }}
+          className="invite-en invite-ink-white"
+          style={{ letterSpacing: "0.08em" }}
         />
-        <Photo src={p.stack2} top={2230} left={24} w={327} h={214} />
+        <Photo src={p.stack2} top={y(2230)} left={24} w={327} h={214} />
         <Txt
-          top={2421}
+          top={y(2421)}
           left={0}
           w={375}
           text={i.stackQuote2}
-          className="invite-en invite-en--sm invite-ink-white"
-          style={{ letterSpacing: "0.12em" }}
+          className="invite-en invite-ink-white"
+          style={{ letterSpacing: "0.08em" }}
         />
-        <Photo src={p.stack3} top={2458} left={24} w={327} h={214} />
+        <Photo src={p.stack3} top={y(2458)} left={24} w={327} h={214} />
         <Txt
-          top={2650}
+          top={y(2650)}
           left={0}
           w={375}
           text={i.stackQuote3}
-          className="invite-en invite-en--sm invite-ink-white"
-          style={{ letterSpacing: "0.08em" }}
+          className="invite-en invite-ink-white"
+          style={{ letterSpacing: "0.06em", padding: "0 0.5rem", boxSizing: "border-box" }}
         />
 
-        <Box top={2688} left={0} w={375} h={85} className="invite-countdown-wrap">
+        <Box top={y(2688)} left={0} w={375} h={85} className="invite-countdown-wrap">
           <StoryCountdown />
         </Box>
 
-        <Photo src={p.tall} top={2800} left={49} w={299} h={425} />
-        <Decor src={d.leaf1} top={2818} left={21} w={20} h={54} />
-        <Decor src={d.leaf2} top={2975} left={21} w={20} h={54} />
-        <Photo src={p.cutout} top={3047} left={-4} w={256} h={441} />
-        <Decor src={d.leaf3} top={3133} left={23} w={16} h={65} />
-        <Dot top={3267} left={350} />
-        <Decor src={d.quoteBannerR} top={3314} left={199} w={162} h={35} />
+        <Photo src={p.tall} top={y(2800)} left={49} w={299} h={425} />
+        <Decor src={d.leaf1} top={y(2818)} left={21} w={20} h={54} />
+        <Decor src={d.leaf2} top={y(2975)} left={21} w={20} h={54} />
+        <Decor
+          src={d.pearlOyster}
+          top={y(3345)}
+          left={230}
+          w={220}
+          h={172}
+          className="invite-pearl"
+        />
+        <Photo
+          src={p.cutout}
+          top={y(3047)}
+          left={-4}
+          w={256}
+          h={441}
+          className="invite-cutout"
+        />
+        <Decor src={d.leaf3} top={y(3133)} left={23} w={16} h={65} />
 
-        <Photo src={p.wide1} top={3510} left={-4} w={383} h={200} />
-        <Photo src={p.wide2} top={3710} left={-4} w={383} h={200} />
+        <Photo src={p.wide1} top={y(3510)} left={-4} w={383} h={200} />
+        <Photo src={p.wide2} top={y(3710)} left={-4} w={383} h={200} />
         <Txt
-          top={3880}
+          top={y(3880)}
           left={0}
           w={375}
-          text={i.inviteEn}
-          className="invite-zh invite-zh--light invite-ink-white"
-          style={{ letterSpacing: "0.2em" }}
+          text={i.wideWelcomeEn}
+          className="invite-en invite-ink-white"
+          style={{ letterSpacing: "0.12em" }}
         />
 
-        <Dot top={3955} left={182} />
-        <Decor src={d.quoteBannerC} top={3985} left={88} w={199} h={27} />
+        <Dot top={y(3955)} left={182} />
+        <Decor src={d.quoteBannerC} top={y(3985)} left={88} w={199} h={27} />
         <Txt
-          top={4045}
+          top={y(4045)}
           left={0}
           w={375}
           text={i.meet}
-          className="invite-zh invite-zh--light invite-ink-black"
-          style={{ lineHeight: 1.8, letterSpacing: "0.18em" }}
+          className={`${bodyFont} invite-ink-black`}
+          style={{
+            lineHeight: isEn ? 1.5 : 1.8,
+            letterSpacing: isEn ? "0.04em" : "0.18em",
+            padding: isEn ? "0 0.85rem" : undefined,
+            boxSizing: "border-box",
+          }}
         />
-        <Txt
-          top={4140}
-          left={0}
-          w={375}
-          text={i.meetSecondary}
-          className="invite-en invite-ink-black"
-          style={{ lineHeight: 1.45 }}
-        />
+        {hasMeetSecondary ? (
+          <Txt
+            top={y(4140)}
+            left={0}
+            w={375}
+            text={i.meetSecondary}
+            className="invite-en invite-ink-black"
+            style={{ lineHeight: 1.45 }}
+          />
+        ) : null}
 
         {/* Calendar photo — full image, no old polaroid frame */}
         <Photo
           src={p.calendarPhoto}
-          top={4220}
+          top={y2(4220)}
           left={0}
           w={375}
-          h={481}
+          h={493}
           className="invite-calendar-shot"
         />
         <Txt
-          top={4715}
+          top={y2(4718)}
           left={0}
           w={375}
           text={i.dateLong}
-          className="invite-zh invite-ink-black"
-          style={{ lineHeight: 1.8, letterSpacing: "0.12em" }}
+          className={`${bodyFont} invite-ink-black`}
+          style={{
+            lineHeight: 1.7,
+            letterSpacing: isEn ? "0.06em" : "0.12em",
+          }}
         />
-
-        <Dot top={4805} left={182} />
-        <Decor src={d.venueBanner} top={4840} left={98} w={180} h={44} />
+        <Dot top={y2(4788)} left={182} />
+        <Decor src={d.venueBanner} top={y2(4818)} left={98} w={160} h={32} />
 
         <Photo
           src={p.hotelA}
           alt={venueName}
-          top={4895}
+          top={y2(4883)}
           left={14}
           w={168}
           h={175}
@@ -629,23 +711,41 @@ export function StoryInvitation() {
         <Photo
           src={p.hotelB}
           alt={venueName}
-          top={4945}
+          top={y2(4933)}
           left={193}
           w={168}
           h={175}
           className="invite-hotel-shot invite-hotel-shot--b"
         />
         <Txt
-          top={5135}
+          top={y2(5120)}
           left={0}
           w={375}
-          text={`${venueName}\n${venueDetail}`}
-          className="invite-zh invite-ink-black"
-          style={{ lineHeight: 1.8, letterSpacing: "0.12em" }}
+          text={venueName}
+          className={`${bodyMd} invite-venue-name`}
+          style={{
+            letterSpacing: isEn ? "0.04em" : "0.12em",
+            padding: isEn ? "0 0.75rem" : undefined,
+            boxSizing: "border-box",
+          }}
+        />
+        <Txt
+          top={y2(5152)}
+          left={0}
+          w={375}
+          text={venueDetail}
+          className={`${bodyFont} invite-ink-black invite-venue-address`}
+          style={{
+            lineHeight: 1.55,
+            letterSpacing: isEn ? "0.03em" : "0.08em",
+            padding: isEn ? "0 0.85rem" : "0 0.5rem",
+            boxSizing: "border-box",
+          }}
         />
       </div>
 
       <section className="invite-dress" aria-label={t.dressCode.title}>
+        <span className="invite-section-dot" aria-hidden />
         <div className="invite-dress__banner">
           <Image
             src={d.dressCodeBanner}

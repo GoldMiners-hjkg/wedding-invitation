@@ -1,17 +1,25 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Image from "next/image";
 import { ScrollReveal } from "./ScrollReveal";
-import { EditorialSectionHeader } from "@/components/editorial/motifs";
 import {
   GUEST_COUNT_OPTIONS,
   HOTEL_CHECK_IN_DATE_OPTIONS,
   formatHotelCheckInDates,
   hotelNightCount,
 } from "@/lib/wedding";
+import { INVITE_DECOR } from "@/lib/invite-template";
 import { useLanguage } from "@/lib/i18n/context";
 import { interpolate } from "@/lib/i18n/translations";
+import type { Locale } from "@/lib/i18n/types";
 import type { RSVPFormData } from "@/lib/types";
+
+const RSVP_TITLE_BY_LOCALE: Record<Locale, string> = {
+  "zh-CN": INVITE_DECOR.rsvpTitleZhCN,
+  "zh-TW": INVITE_DECOR.rsvpTitleZhTW,
+  en: INVITE_DECOR.rsvpTitleEn,
+};
 
 const initialForm: RSVPFormData = {
   full_name: "",
@@ -111,7 +119,7 @@ function FieldLabel({
 }
 
 export function RSVPForm() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const { rsvp, wedding, arrivalTimes } = t;
 
   const [form, setForm] = useState<RSVPFormData>(initialForm);
@@ -200,17 +208,34 @@ export function RSVPForm() {
       : interpolate(rsvp.confirmHotelOneNight, { dates: selectedDatesLabel });
 
   return (
-    <section className="relative px-6 py-20 sm:px-10">
+    <section className="relative px-6 py-4 sm:px-10 sm:py-5">
       <ScrollReveal>
         <div className="mx-auto max-w-lg vintage-text-halo">
           {!submitted && (
             <>
-              <EditorialSectionHeader>
-                <p className="text-eyebrow">{rsvp.label}</p>
-                <h2 className="text-vintage-title mt-3 text-center text-4xl sm:text-5xl">
-                  {rsvp.title}
-                </h2>
-              </EditorialSectionHeader>
+              <span className="invite-section-dot" aria-hidden />
+              <div className="invite-rsvp__banner">
+                <Image
+                  src={INVITE_DECOR.rsvpBanner}
+                  alt="RSVP"
+                  width={399}
+                  height={204}
+                  unoptimized
+                  className="invite-rsvp__banner-img"
+                  draggable={false}
+                />
+              </div>
+              <h2 className="invite-rsvp__title">
+                <Image
+                  src={RSVP_TITLE_BY_LOCALE[locale]}
+                  alt={rsvp.title}
+                  width={locale === "en" ? 964 : 872}
+                  height={160}
+                  unoptimized
+                  className="invite-rsvp__title-img"
+                  draggable={false}
+                />
+              </h2>
               <p className="text-body-vintage mt-6 text-center">
                 {rsvp.deadline} {wedding.rsvpDeadline}
               </p>

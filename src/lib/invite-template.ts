@@ -13,7 +13,7 @@ const P = "/images/invite/photos";
 const D = "/images/invite/decor";
 
 /** Design canvas size from the original H5 (px) */
-export const INVITE_DESIGN = { width: 375, height: 5280 } as const;
+export const INVITE_DESIGN = { width: 375, height: 5210 } as const;
 
 /** Replace these paths with your own files */
 export const INVITE_PHOTOS = {
@@ -29,7 +29,7 @@ export const INVITE_PHOTOS = {
   cutout: `${P}/cutout.png`,
   wide1: `${P}/wide-1.jpg`,
   wide2: `${P}/wide-2.jpg`,
-  calendarPhoto: `/download/wedding01.png`,
+  calendarPhoto: `/download/group-3.png`,
   /** Hotel venue photos (replaces map) */
   hotelA: MEDIA.hotelPhotos[0],
   hotelB: MEDIA.hotelPhotos[1],
@@ -51,10 +51,17 @@ export const INVITE_DECOR = {
   calendarFrame: `${D}/calendar-frame.png`,
   venueBanner: `${D}/venue-banner.png`,
   dressCodeBanner: `${D}/dress-code-banner.png`,
+  rsvpBanner: `${D}/rsvp-banner.png`,
+  rsvpTitleZhCN: `${D}/rsvp-title-zh-cn.png`,
+  rsvpTitleZhTW: `${D}/rsvp-title-zh-tw.png`,
+  rsvpTitleEn: `${D}/rsvp-title-en.png`,
   closingBanner: `${D}/closing-banner.png`,
+  pearlOyster: `${D}/pearl-oyster.png`,
+  seaweedVine: `${D}/seaweed-vine.png`,
+  starfish: `${D}/starfish.png`,
 } as const;
 
-export const INVITE_AUDIO = "/images/invite/audio/bgm.mp3";
+export const INVITE_AUDIO = "/images/invite/audio/i-love-you-3000.mp3";
 
 /** Shared non-translated invite constants */
 export const INVITE_META = {

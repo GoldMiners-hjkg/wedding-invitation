@@ -136,6 +136,7 @@ export interface Translations {
     heartPoem: string;
     heartPoemSecondary: string;
     welcomeEn: string;
+    wideWelcomeEn: string;
     stackQuote1: string;
     stackQuote2: string;
     stackQuote3: string;

@@ -34,13 +34,13 @@ export type InviteCopy = {
 const inviteEn: InviteCopy = {
   heroTag: "See you at the wedding",
   inviteTitle: "Our Wedding Invitation",
-  inviteEn: "To Friends And Family.",
+  inviteEn: "To Our Friends And Family.",
   stripQuote:
     "As the clouds and mist dissipate, I love you and everyone knows it",
   letter:
     "This invitation is filled with our whole heart.\nYou who receive it\nare the most important people in our lives.\nWe sincerely invite you and your family to our wedding\nto witness our love.\nThank you for your care and support all along —\nwe look forward to welcoming you together.",
   letterSecondary:
-    "To Our Family And Friends,\nThank You For Celebrating Our Special Day,\nSupporting Us And Sharing Our Love.",
+    "Thank You For Celebrating Our Special Day,\nSupporting Us And Sharing Our Love.",
   heartPoem:
     "Like the tides that always find the shore,\nand the breeze that gently lingers,\nwe found each other.\nWe would be honored to celebrate this joy with you.",
   heartPoemSecondary: "",
@@ -74,13 +74,13 @@ const inviteEn: InviteCopy = {
 const inviteZhCN: InviteCopy = {
   heroTag: "婚礼见",
   inviteTitle: "我们的「婚礼邀请」",
-  inviteEn: "To Friends And Family.",
+  inviteEn: "To Our Friends And Family.",
   stripQuote:
     "As the clouds and mist dissipate, I love you and everyone knows it",
   letter:
     "这是一封心意满满的婚礼邀请函\n收到这封邀请函的你们\n都是我们人生中最重要的部分\n诚挚邀请您携家人参加我们的婚礼\n见证我们的爱情\n感谢您一直以来的支持与关爱\n我们携手期待着您的到来",
   letterSecondary:
-    "To Our Family And Friends,\nThank You For Celebrating Our Special Day,\nSupporting Us And Sharing Our Love.",
+    "Thank You For Celebrating Our Special Day,\nSupporting Us And Sharing Our Love.",
   heartPoem:
     "如潮汐终将相遇，\n如微风终将停留。\n我们找到了彼此，\n也期待与您分享这份幸福。",
   heartPoemSecondary:
@@ -115,13 +115,13 @@ const inviteZhCN: InviteCopy = {
 const inviteZhTW: InviteCopy = {
   heroTag: "婚禮見",
   inviteTitle: "我們的「婚禮邀請」",
-  inviteEn: "To Friends And Family.",
+  inviteEn: "To Our Friends And Family.",
   stripQuote:
     "As the clouds and mist dissipate, I love you and everyone knows it",
   letter:
     "這是一封心意滿滿的婚禮邀請函\n收到這封邀請函的你們\n都是我們人生中最重要的部分\n誠摯邀請您攜家人參加我們的婚禮\n見證我們的愛情\n感謝您一直以來的支持與關愛\n我們攜手期待著您的到來",
   letterSecondary:
-    "To Our Family And Friends,\nThank You For Celebrating Our Special Day,\nSupporting Us And Sharing Our Love.",
+    "Thank You For Celebrating Our Special Day,\nSupporting Us And Sharing Our Love.",
   heartPoem:
     "如潮汐終將相遇，\n如微風終將停留。\n我們找到了彼此，\n也期待與您分享這份幸福。",
   heartPoemSecondary:

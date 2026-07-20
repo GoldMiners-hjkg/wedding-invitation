@@ -841,7 +841,7 @@ body {
   justify-content: center;
   gap: 0.7rem;
   flex-wrap: wrap;
-  margin-bottom: 0.7rem;
+  margin-bottom: 33px;
 }
 
 .invite-dress__swatch {
@@ -859,15 +859,27 @@ body {
 }
 
 .invite-dress__chip-label {
-  font-family: var(--font-invite-en), "Cormorant Garamond", "GenRyuMin TW",
-    serif;
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
+  font-weight: 400;
+  letter-spacing: 0.08em;
   color: #111;
   text-align: center;
   max-width: 3.8rem;
   line-height: 1.25;
+  white-space: normal;
+}
+
+/* Match invite body / venue address — Chinese was reading larger than the letter text */
+.invite-dress__chip-label.invite-zh,
+.invite-dress__list li.invite-zh {
+  font-family: "GenRyuMin TW", "Source Han Serif TC", "Songti SC", serif !important;
+  font-size: clamp(11px, 3vw, 12.5px) !important;
+  font-weight: 400 !important;
+}
+
+.invite-dress__chip-label.invite-en {
+  font-size: clamp(12px, 3.3vw, 14px) !important;
+  font-weight: 500;
+  letter-spacing: 0.04em;
 }
 
 .invite-dress__list {
@@ -876,19 +888,26 @@ body {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0.7rem;
 }
 
 .invite-dress__list li {
   position: relative;
   padding-left: 1.1rem;
-  font-family: var(--font-invite-en), "Cormorant Garamond", "GenRyuMin TW",
-    "Source Han Serif TC", serif;
-  font-size: clamp(14px, 3.7vw, 16px);
-  font-weight: 500;
-  line-height: 1.7;
-  letter-spacing: 0.03em;
   color: #111;
+  text-align: left;
+}
+
+.invite-dress__list li.invite-zh {
+  line-height: 1.85;
+  letter-spacing: 0.12em;
+}
+
+.invite-dress__list li.invite-en {
+  font-size: clamp(13px, 3.5vw, 15px) !important;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
 }
 
 .invite-dress__list li::before {

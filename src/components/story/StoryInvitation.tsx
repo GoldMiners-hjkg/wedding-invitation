@@ -861,7 +861,7 @@ export function StoryInvitation() {
                 style={{ backgroundColor: color.hex }}
                 title={t.dressCode.colors[index]}
               />
-              <span className="invite-dress__chip-label">
+              <span className={`${bodyFont} invite-dress__chip-label`}>
                 {t.dressCode.colors[index]}
               </span>
             </div>
@@ -869,7 +869,9 @@ export function StoryInvitation() {
         </div>
         <ul className="invite-dress__list">
           {t.dressCode.guidance.map((item) => (
-            <li key={item}>{item}</li>
+            <li key={item} className={bodyFont}>
+              {item}
+            </li>
           ))}
         </ul>
       </section>

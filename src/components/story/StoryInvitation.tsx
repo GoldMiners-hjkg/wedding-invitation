@@ -32,7 +32,7 @@ import {
 
 const { width: DW, height: DH } = INVITE_DESIGN;
 
-const InviteCanvasContext = createContext(DH);
+const InviteCanvasContext = createContext<number>(DH);
 
 function pct(n: number, base: number) {
   return `${(n / base) * 100}%`;

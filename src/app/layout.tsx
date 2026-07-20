@@ -1,6 +1,15 @@
 import type { Metadata, Viewport } from "next";
+import { Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
+
+const inviteEn = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-invite-en",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "王哲 & 莊采縈 · 婚礼邀请",
@@ -21,7 +30,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className="h-full" suppressHydrationWarning>
+    <html
+      lang="zh-CN"
+      className={`h-full ${inviteEn.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <link
           rel="preload"

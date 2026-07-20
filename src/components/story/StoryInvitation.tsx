@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import {
+  createContext,
   useCallback,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -30,6 +32,8 @@ import {
 
 const { width: DW, height: DH } = INVITE_DESIGN;
 
+const InviteCanvasContext = createContext(DH);
+
 function pct(n: number, base: number) {
   return `${(n / base) * 100}%`;
 }
@@ -51,14 +55,15 @@ function Box({
   style?: CSSProperties;
   children?: ReactNode;
 }) {
+  const canvasH = useContext(InviteCanvasContext);
   return (
     <div
       className={`invite-abs ${className}`}
       style={{
-        top: pct(top, DH),
+        top: pct(top, canvasH),
         left: pct(left, DW),
         width: pct(w, DW),
-        ...(h != null ? { height: pct(h, DH) } : {}),
+        ...(h != null ? { height: pct(h, canvasH) } : {}),
         ...style,
       }}
     >
@@ -417,13 +422,16 @@ export function StoryInvitation() {
   const meetGap = hasMeetSecondary ? 0 : -80;
   const y = (top: number) => top + poemGap;
   const y2 = (top: number) => top + poemGap + meetGap;
+  /** End canvas just after venue address — avoids a tall empty band before Dress Code */
+  const canvasHeight = y2(5152) + 88;
 
   return (
     <div className={`invite-root${isEn ? " invite-root--en" : ""}`}>
       <BgmToggle />
+      <InviteCanvasContext.Provider value={canvasHeight}>
       <div
         className="invite-canvas"
-        style={{ aspectRatio: `${DW} / ${DH}` }}
+        style={{ aspectRatio: `${DW} / ${canvasHeight}` }}
       >
         {/* —— Hero —— */}
         <HeroMedia
@@ -640,15 +648,17 @@ export function StoryInvitation() {
           h={76}
           className="invite-starfish"
         />
-        <Decor
-          src={d.starfish}
-          top={1899}
-          left={318}
-          w={64}
-          h={62}
-          className="invite-starfish"
-          style={{ transform: "rotate(-18deg)" }}
-        />
+        {!isEn ? (
+          <Decor
+            src={d.starfish}
+            top={1899}
+            left={318}
+            w={64}
+            h={62}
+            className="invite-starfish"
+            style={{ transform: "rotate(-18deg)" }}
+          />
+        ) : null}
         {hasPoemSecondary ? (
           <Txt
             top={1876}
@@ -828,6 +838,7 @@ export function StoryInvitation() {
           }}
         />
       </div>
+      </InviteCanvasContext.Provider>
 
       <section className="invite-dress" aria-label={t.dressCode.title}>
         <span className="invite-section-dot" aria-hidden />

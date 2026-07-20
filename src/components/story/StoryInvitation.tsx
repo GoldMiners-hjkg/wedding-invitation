@@ -281,77 +281,112 @@ function Dot({ top, left }: { top: number; left: number }) {
 function BgmToggle() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const userPausedRef = useRef(false);
+  const unlockedRef = useRef(false);
   const [on, setOn] = useState(false);
 
   useEffect(() => {
-    const audio = new Audio(INVITE_AUDIO);
+    const audio = audioRef.current;
+    if (!audio) return;
+
     audio.loop = true;
     audio.preload = "auto";
-    audioRef.current = audio;
+    audio.setAttribute("playsinline", "true");
+    audio.setAttribute("webkit-playsinline", "true");
+    audio.load();
 
-    let unlocked = false;
     const tryPlay = () => {
-      if (userPausedRef.current || !audioRef.current) return Promise.resolve(false);
-      return playAudioInWeChat(audioRef.current)
-        .then(() => {
-          if (audioRef.current?.paused) return false;
-          unlocked = true;
-          setOn(true);
-          return true;
-        })
-        .catch(() => {
+      if (userPausedRef.current || !audioRef.current) {
+        return Promise.resolve(false);
+      }
+
+      return playAudioInWeChat(audioRef.current).then((played) => {
+        if (!played || audioRef.current?.paused) {
           setOn(false);
           return false;
-        });
+        }
+
+        unlockedRef.current = true;
+        setOn(true);
+        return true;
+      });
     };
 
-    void tryPlay();
-
     const unlockOnGesture = () => {
-      if (unlocked || userPausedRef.current) return;
+      if (unlockedRef.current || userPausedRef.current) return;
       void tryPlay().then((ok) => {
         if (ok) removeUnlockListeners();
       });
     };
 
     const removeUnlockListeners = () => {
-      document.removeEventListener("pointerdown", unlockOnGesture);
-      document.removeEventListener("touchstart", unlockOnGesture);
-      document.removeEventListener("click", unlockOnGesture);
+      window.removeEventListener("pointerdown", unlockOnGesture, true);
+      window.removeEventListener("touchstart", unlockOnGesture, true);
+      window.removeEventListener("touchend", unlockOnGesture, true);
+      window.removeEventListener("click", unlockOnGesture, true);
+      window.removeEventListener("scroll", unlockOnGesture, true);
+      window.removeEventListener("wheel", unlockOnGesture, true);
+      window.removeEventListener("keydown", unlockOnGesture, true);
     };
 
-    document.addEventListener("pointerdown", unlockOnGesture, { passive: true });
-    document.addEventListener("touchstart", unlockOnGesture, { passive: true });
-    document.addEventListener("click", unlockOnGesture);
+    const onCanPlay = () => {
+      void tryPlay();
+    };
+
+    const unlockOptions: AddEventListenerOptions = { capture: true, passive: true };
+    window.addEventListener("pointerdown", unlockOnGesture, unlockOptions);
+    window.addEventListener("touchstart", unlockOnGesture, unlockOptions);
+    window.addEventListener("touchend", unlockOnGesture, unlockOptions);
+    window.addEventListener("click", unlockOnGesture, unlockOptions);
+    window.addEventListener("scroll", unlockOnGesture, unlockOptions);
+    window.addEventListener("wheel", unlockOnGesture, unlockOptions);
+    window.addEventListener("keydown", unlockOnGesture, unlockOptions);
+    audio.addEventListener("canplaythrough", onCanPlay, { once: true });
+    void tryPlay();
 
     return () => {
       removeUnlockListeners();
+      audio.removeEventListener("canplaythrough", onCanPlay);
       audio.pause();
-      audioRef.current = null;
     };
   }, []);
 
   return (
-    <button
-      type="button"
-      className={`invite-bgm ${on ? "invite-bgm--on" : ""}`}
-      aria-label={on ? "暂停音乐" : "播放音乐"}
-      onClick={(e) => {
-        e.stopPropagation();
-        const audio = audioRef.current;
-        if (!audio) return;
-        if (on) {
-          userPausedRef.current = true;
-          audio.pause();
-          setOn(false);
-        } else {
-          userPausedRef.current = false;
-          void audio.play().then(() => setOn(true)).catch(() => setOn(false));
-        }
-      }}
-    >
-      ♪
-    </button>
+    <>
+      <audio
+        ref={audioRef}
+        src={INVITE_AUDIO}
+        preload="auto"
+        loop
+        aria-hidden
+        style={{ display: "none" }}
+      />
+      <button
+        type="button"
+        className={`invite-bgm ${on ? "invite-bgm--on" : ""}`}
+        aria-label={on ? "暂停音乐" : "播放音乐"}
+        onClick={(e) => {
+          e.stopPropagation();
+          const audio = audioRef.current;
+          if (!audio) return;
+          if (on) {
+            userPausedRef.current = true;
+            audio.pause();
+            setOn(false);
+          } else {
+            userPausedRef.current = false;
+            void audio
+              .play()
+              .then(() => {
+                unlockedRef.current = true;
+                setOn(true);
+              })
+              .catch(() => setOn(false));
+          }
+        }}
+      >
+        ♪
+      </button>
+    </>
   );
 }
 
@@ -370,14 +405,14 @@ export function StoryInvitation() {
   const bodyMd = isEn ? "invite-en invite-en--md" : "invite-zh invite-zh--md";
   const hasPoemSecondary = Boolean(i.heartPoemSecondary.trim());
   const hasMeetSecondary = Boolean(i.meetSecondary.trim());
-  /** zh/en poem blocks sit 120px apart — keep the same gap before WELCOME */
-  const heartPoemBlockGap = 120;
+  /** Tighter gap between English poem and WELCOME */
+  const welcomeAfterPoemGap = 50;
   const poemSecondaryTop = 1876;
   const poemSecondaryLines = i.heartPoemSecondary.split("\n").length;
   const poemSecondaryHeight = poemSecondaryLines * 15 * 1.45;
   const welcomeBaseTop = 1945;
   const poemGap = hasPoemSecondary
-    ? poemSecondaryTop + poemSecondaryHeight + heartPoemBlockGap - welcomeBaseTop
+    ? poemSecondaryTop + poemSecondaryHeight + welcomeAfterPoemGap - welcomeBaseTop
     : -90;
   const meetGap = hasMeetSecondary ? 0 : -80;
   const y = (top: number) => top + poemGap;

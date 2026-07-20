@@ -35,15 +35,18 @@ export function configureInlineVideo(video: HTMLVideoElement) {
  */
 function playInWeChatContext(attemptPlay: () => Promise<unknown>) {
   if (!isWeChatBrowser()) {
-    return attemptPlay();
+    return attemptPlay().then(() => true).catch(() => false);
   }
 
-  return new Promise<void>((resolve) => {
+  return new Promise<boolean>((resolve) => {
     let settled = false;
     const run = () => {
       if (settled) return;
       settled = true;
-      void attemptPlay().finally(() => resolve());
+      void attemptPlay()
+        .then(() => true)
+        .catch(() => false)
+        .then(resolve);
     };
 
     if (window.WeixinJSBridge) {

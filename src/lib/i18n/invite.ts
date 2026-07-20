@@ -34,7 +34,7 @@ export type InviteCopy = {
 const inviteEn: InviteCopy = {
   heroTag: "See you at the wedding",
   inviteTitle: "Our Wedding Invitation",
-  inviteEn: "To Our Wedding",
+  inviteEn: "To Friends And Family.",
   stripQuote:
     "As the clouds and mist dissipate, I love you and everyone knows it",
   letter:
@@ -44,7 +44,7 @@ const inviteEn: InviteCopy = {
   heartPoem:
     "Like the tides that always find the shore,\nand the breeze that gently lingers,\nwe found each other.\nWe would be honored to celebrate this joy with you.",
   heartPoemSecondary: "",
-  welcomeEn: "WELCOME TO WEDDING",
+  welcomeEn: "WELCOME TO OUR WEDDING",
   wideWelcomeEn: "WELCOME TO OUR WEDDING",
   stackQuote1: "I love three things in this world.",
   stackQuote2: "Sun, moon and you.",
@@ -74,7 +74,7 @@ const inviteEn: InviteCopy = {
 const inviteZhCN: InviteCopy = {
   heroTag: "婚礼见",
   inviteTitle: "我们的「婚礼邀请」",
-  inviteEn: "To Our Wedding",
+  inviteEn: "To Friends And Family.",
   stripQuote:
     "As the clouds and mist dissipate, I love you and everyone knows it",
   letter:
@@ -85,7 +85,7 @@ const inviteZhCN: InviteCopy = {
     "如潮汐终将相遇，\n如微风终将停留。\n我们找到了彼此，\n也期待与您分享这份幸福。",
   heartPoemSecondary:
     "Like the tides that always find the shore,\nand the breeze that gently lingers,\nwe found each other.\nWe would be honored to celebrate this joy with you.",
-  welcomeEn: "WELCOME TO WEDDING",
+  welcomeEn: "WELCOME TO OUR WEDDING",
   wideWelcomeEn: "WELCOME TO OUR WEDDING",
   stackQuote1: "I love three things in this world.",
   stackQuote2: "Sun, moon and you.",
@@ -115,7 +115,7 @@ const inviteZhCN: InviteCopy = {
 const inviteZhTW: InviteCopy = {
   heroTag: "婚禮見",
   inviteTitle: "我們的「婚禮邀請」",
-  inviteEn: "To Our Wedding",
+  inviteEn: "To Friends And Family.",
   stripQuote:
     "As the clouds and mist dissipate, I love you and everyone knows it",
   letter:
@@ -126,7 +126,7 @@ const inviteZhTW: InviteCopy = {
     "如潮汐終將相遇，\n如微風終將停留。\n我們找到了彼此，\n也期待與您分享這份幸福。",
   heartPoemSecondary:
     "Like the tides that always find the shore,\nand the breeze that gently lingers,\nwe found each other.\nWe would be honored to celebrate this joy with you.",
-  welcomeEn: "WELCOME TO WEDDING",
+  welcomeEn: "WELCOME TO OUR WEDDING",
   wideWelcomeEn: "WELCOME TO OUR WEDDING",
   stackQuote1: "I love three things in this world.",
   stackQuote2: "Sun, moon and you.",
